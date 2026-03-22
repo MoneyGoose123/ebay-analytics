@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nogi-japan 完全攻略ガイド | eBay分析</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #060c18;
+    --card: #0d1424;
+    --card2: #131e30;
+    --border: #1a2840;
+    --accent: #3b82f6;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --purple: #8b5cf6;
+    --cyan: #06b6d4;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --muted2: #94a3b8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.7; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #060c18 0%, #0f1f3d 40%, #1a0f3d 80%, #060c18 100%);
+    padding: 48px 32px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -50%; left: -10%; right: -10%; bottom: -50%;
+    background: radial-gradient(ellipse at 30% 40%, rgba(59,130,246,.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 60%, rgba(139,92,246,.06) 0%, transparent 60%);
+  }
+  .hero-content { position: relative; max-width: 900px; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(59,130,246,.12); border: 1px solid rgba(59,130,246,.3); border-radius: 20px; padding: 6px 16px; font-size: 12px; color: #93c5fd; margin-bottom: 20px; }
+  .hero h1 { font-size: 36px; font-weight: 800; line-height: 1.2; margin-bottom: 12px; }
+  .hero h1 span { background: linear-gradient(90deg, #60a5fa, #a78bfa, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { font-size: 16px; color: var(--muted2); max-width: 680px; }
+  .hero-stats { display: flex; gap: 32px; margin-top: 28px; flex-wrap: wrap; }
+  .hero-stat { }
+  .hero-stat-val { font-size: 28px; font-weight: 800; }
+  .hero-stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* LAYOUT */
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+  /* SECTION */
+  .section { margin-bottom: 48px; }
+  .section-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
+  .section-num { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; flex-shrink: 0; }
+  .section-num.red { background: rgba(239,68,68,.15); color: #f87171; }
+  .section-num.green { background: rgba(16,185,129,.15); color: #34d399; }
+  .section-num.blue { background: rgba(59,130,246,.15); color: #60a5fa; }
+  .section-num.amber { background: rgba(245,158,11,.15); color: #fbbf24; }
+  .section-num.purple { background: rgba(139,92,246,.15); color: #a78bfa; }
+  .section-num.cyan { background: rgba(6,182,212,.15); color: #22d3ee; }
+  .section-title-group h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .section-title-group p { font-size: 14px; color: var(--muted2); }
+  .impact { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-left: 8px; }
+  .impact.high { background: rgba(239,68,68,.2); color: #f87171; border: 1px solid rgba(239,68,68,.3); }
+  .impact.medium { background: rgba(245,158,11,.2); color: #fbbf24; border: 1px solid rgba(245,158,11,.3); }
+  .impact.low { background: rgba(16,185,129,.2); color: #34d399; border: 1px solid rgba(16,185,129,.3); }
+
+  /* CARD */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; margin-bottom: 16px; }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .card-title { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .card-sub { font-size: 12px; color: var(--muted); }
+
+  /* ALERT */
+  .alert { border-radius: 10px; padding: 14px 18px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px; }
+  .alert.danger { background: rgba(239,68,68,.07); border: 1px solid rgba(239,68,68,.2); }
+  .alert.warning { background: rgba(245,158,11,.07); border: 1px solid rgba(245,158,11,.2); }
+  .alert.success { background: rgba(16,185,129,.07); border: 1px solid rgba(16,185,129,.2); }
+  .alert.info { background: rgba(59,130,246,.07); border: 1px solid rgba(59,130,246,.2); }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-body { flex: 1; }
+  .alert-title { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+  .alert.danger .alert-title { color: #f87171; }
+  .alert.warning .alert-title { color: #fbbf24; }
+  .alert.success .alert-title { color: #34d399; }
+  .alert.info .alert-title { color: #60a5fa; }
+  .alert-text { font-size: 13px; color: var(--muted2); }
+
+  /* PROBLEM TABLE */
+  .problem-table { width: 100%; border-collapse: collapse; }
+  .problem-table th { background: rgba(255,255,255,.04); padding: 10px 12px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); border-bottom: 1px solid var(--border); }
+  .problem-table td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.03); font-size: 13px; vertical-align: middle; }
+  .problem-table tr:hover td { background: rgba(255,255,255,.02); }
+  .days-badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+  .days-badge.critical { background: rgba(239,68,68,.2); color: #f87171; }
+  .days-badge.warning { background: rgba(245,158,11,.2); color: #fbbf24; }
+  .days-badge.ok { background: rgba(16,185,129,.2); color: #34d399; }
+  .price-cell { font-weight: 700; color: #60a5fa; }
+  .action-tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+  .action-tag.stop { background: rgba(239,68,68,.15); color: #f87171; }
+  .action-tag.up { background: rgba(16,185,129,.15); color: #34d399; }
+  .action-tag.fix { background: rgba(245,158,11,.15); color: #fbbf24; }
+  .action-tag.add { background: rgba(59,130,246,.15); color: #60a5fa; }
+
+  /* COMPARISON TABLE */
+  .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media(max-width:700px){ .comp-grid { grid-template-columns: 1fr; } }
+  .comp-card { background: var(--card2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .comp-card-header { padding: 14px 18px; font-size: 13px; font-weight: 700; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .comp-card-header.nogi { background: rgba(16,185,129,.08); color: #34d399; border-bottom-color: rgba(16,185,129,.2); }
+  .comp-card-header.rival { background: rgba(245,158,11,.08); color: #fbbf24; border-bottom-color: rgba(245,158,11,.2); }
+  .comp-item { padding: 10px 18px; border-bottom: 1px solid rgba(255,255,255,.03); display: flex; justify-content: space-between; align-items: center; }
+  .comp-item:last-child { border-bottom: none; }
+  .comp-item-title { font-size: 12px; color: var(--muted2); flex: 1; margin-right: 8px; }
+  .comp-item-price { font-size: 14px; font-weight: 700; white-space: nowrap; }
+
+  /* OPPORTUNITY GRID */
+  .opp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .opp-card { background: var(--card2); border: 1px solid var(--border); border-radius: 12px; padding: 18px; position: relative; }
+  .opp-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 12px 12px 0 0; }
+  .opp-card.tier1::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
+  .opp-card.tier2::before { background: linear-gradient(90deg, #3b82f6, #6366f1); }
+  .opp-card.tier3::before { background: linear-gradient(90deg, #10b981, #059669); }
+  .opp-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .opp-title { font-size: 14px; font-weight: 700; }
+  .opp-potential { font-size: 13px; font-weight: 800; }
+  .tier1 .opp-potential { color: #fbbf24; }
+  .tier2 .opp-potential { color: #60a5fa; }
+  .tier3 .opp-potential { color: #34d399; }
+  .opp-body { font-size: 12px; color: var(--muted2); margin-bottom: 12px; line-height: 1.6; }
+  .opp-examples { }
+  .opp-example { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-top: 1px solid rgba(255,255,255,.04); }
+  .opp-example-title { font-size: 11px; color: var(--muted); flex: 1; margin-right: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .opp-example-price { font-size: 12px; font-weight: 700; color: var(--amber); white-space: nowrap; }
+
+  /* TITLE OPTIMIZER */
+  .title-row { background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+  .title-before { font-size: 12px; color: #f87171; background: rgba(239,68,68,.08); border-radius: 6px; padding: 8px 12px; margin-bottom: 8px; font-family: monospace; border: 1px solid rgba(239,68,68,.15); }
+  .title-after { font-size: 12px; color: #34d399; background: rgba(16,185,129,.08); border-radius: 6px; padding: 8px 12px; font-family: monospace; border: 1px solid rgba(16,185,129,.15); }
+  .title-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+  .title-label.bad { color: #f87171; }
+  .title-label.good { color: #34d399; }
+  .title-note { font-size: 12px; color: var(--muted2); margin-top: 8px; }
+  .arrow-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+  .arrow-row span { font-size: 18px; }
+
+  /* ACTION PLAN */
+  .month-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media(max-width:800px){ .month-grid { grid-template-columns: 1fr; } }
+  .month-card { background: var(--card2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .month-header { padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+  .month-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+  .month-goal { font-size: 18px; font-weight: 800; }
+  .month-card:nth-child(1) .month-header { background: rgba(59,130,246,.08); }
+  .month-card:nth-child(1) .month-goal { color: #60a5fa; }
+  .month-card:nth-child(2) .month-header { background: rgba(139,92,246,.08); }
+  .month-card:nth-child(2) .month-goal { color: #a78bfa; }
+  .month-card:nth-child(3) .month-header { background: rgba(16,185,129,.08); }
+  .month-card:nth-child(3) .month-goal { color: #34d399; }
+  .month-body { padding: 16px 18px; }
+  .month-item { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+  .month-item:last-child { border-bottom: none; }
+  .month-item-icon { flex-shrink: 0; margin-top: 1px; }
+  .month-item-text { font-size: 13px; color: var(--muted2); }
+  .month-item-text strong { color: var(--text); display: block; margin-bottom: 2px; }
+
+  /* KPI ROW */
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .kpi-mini { background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .kpi-mini-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+  .kpi-mini-val { font-size: 22px; font-weight: 800; }
+  .kpi-mini-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  /* PROFIT TABLE */
+  .profit-matrix { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; background: var(--border); border-radius: 10px; overflow: hidden; }
+  @media(max-width:600px){ .profit-matrix { grid-template-columns: 1fr; } }
+  .pm-cell { background: var(--card2); padding: 14px 16px; }
+  .pm-cell.header { background: rgba(255,255,255,.04); }
+  .pm-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .pm-val { font-size: 16px; font-weight: 700; }
+  .pm-rate { font-size: 12px; color: var(--muted2); }
+
+  /* WARNING BOX */
+  .warning-box { background: rgba(239,68,68,.06); border: 1px solid rgba(239,68,68,.2); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .warning-box h3 { color: #f87171; font-size: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .warning-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .warning-list li { font-size: 13px; color: var(--muted2); padding: 6px 10px; background: rgba(239,68,68,.04); border-radius: 6px; display: flex; align-items: center; gap: 8px; }
+  .warning-list li::before { content: '⚠'; font-size: 14px; }
+
+  /* SUCCESS BOX */
+  .success-box { background: rgba(16,185,129,.06); border: 1px solid rgba(16,185,129,.2); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .success-box h3 { color: #34d399; font-size: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+
+  /* GRID-2 */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media(max-width:700px){ .grid2 { grid-template-columns: 1fr; } }
+
+  /* TAG */
+  .tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; margin: 2px; }
+  .tag.blue { background: rgba(59,130,246,.15); color: #93c5fd; border: 1px solid rgba(59,130,246,.2); }
+  .tag.green { background: rgba(16,185,129,.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,.2); }
+  .tag.amber { background: rgba(245,158,11,.15); color: #fcd34d; border: 1px solid rgba(245,158,11,.2); }
+  .tag.red { background: rgba(239,68,68,.15); color: #fca5a5; border: 1px solid rgba(239,68,68,.2); }
+  .tag.purple { background: rgba(139,92,246,.15); color: #c4b5fd; border: 1px solid rgba(139,92,246,.2); }
+  .tag.mono { background: rgba(255,255,255,.06); color: #94a3b8; border: 1px solid rgba(255,255,255,.08); font-family: monospace; }
+
+  /* NAV */
+  .top-nav { background: rgba(0,0,0,.5); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .top-nav a { color: var(--muted2); text-decoration: none; font-size: 13px; }
+  .top-nav a:hover { color: var(--text); }
+  .top-nav .logo { font-weight: 700; font-size: 14px; color: #60a5fa; }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 40px 0; }
+
+  /* CHART */
+  .chart-wrap { height: 260px; position: relative; }
+
+  /* SCROLL NAV */
+  .jump-nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+  .jump-btn { background: rgba(255,255,255,.05); border: 1px solid var(--border); color: var(--muted2); padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 12px; text-decoration: none; transition: all .2s; }
+  .jump-btn:hover { background: rgba(59,130,246,.15); border-color: rgba(59,130,246,.3); color: #93c5fd; }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div style="display:flex;align-items:center;gap:16px">
+    <a href="index.html" class="logo">← ダッシュボードに戻る</a>
+  </div>
+  <div style="font-size:12px;color:var(--muted)">nogi-japan 専用分析 | 2026.03.22</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🎯 nogi-japan 完全攻略ガイド</div>
+    <h1>データが語る、<span>今すぐ動くべき</span><br>10の改善アクション</h1>
+    <p>18,393件・5.17億円の取引データから抽出した、nogi-japanだけのカスタム戦略。競合の成功パターンと自社の隠れた強みを徹底分析。</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val" style="color:#60a5fa">214万円</div>
+        <div class="hero-stat-label">現在の月売上</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val" style="color:#f59e0b">2,140万円</div>
+        <div class="hero-stat-label">10倍目標</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val" style="color:#10b981">296件</div>
+        <div class="hero-stat-label">分析対象取引数</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val" style="color:#ef4444">1,019日</div>
+        <div class="hero-stat-label">最長滞留在庫</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="jump-nav">
+  <a class="jump-btn" href="#sec1">🚨 今すぐ止める</a>
+  <a class="jump-btn" href="#sec2">📊 SKU分析の誤解</a>
+  <a class="jump-btn" href="#sec3">⚡ 即効スイッチ戦略</a>
+  <a class="jump-btn" href="#sec4">🏆 競合から盗む</a>
+  <a class="jump-btn" href="#sec5">💎 隠れた強み</a>
+  <a class="jump-btn" href="#sec6">🔤 タイトル最適化</a>
+  <a class="jump-btn" href="#sec7">💰 利益率改善</a>
+  <a class="jump-btn" href="#sec8">🎯 90日行動計画</a>
+</div>
+
+<!-- ===== SECTION 1: 今すぐ止める ===== -->
+<div class="section" id="sec1">
+  <div class="section-header">
+    <div class="section-num red">1</div>
+    <div class="section-title-group">
+      <h2>今すぐ止めるべき出品 <span class="impact high">緊急</span></h2>
+      <p>データ上、最大の機会損失が発生している「負け在庫」の完全リスト</p>
+    </div>
+  </div>
+
+  <div class="alert danger">
+    <div class="alert-icon">🚨</div>
+    <div class="alert-body">
+      <div class="alert-title">衝撃の事実：ゲームソフトが最大2.8年（1,019日）売れていない</div>
+      <div class="alert-text">資金が死んでいる。倉庫スペースが無駄。この在庫を処分するだけで仕入れ資金が回転し、高単価商品に投資できる。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">❌ 超長期在庫リスト（即処分・撤退推奨）</div>
+      <div class="card-sub">一括オークション or 値下げ50%で即売処分</div>
+    </div>
+    <div style="overflow-x:auto">
+    <table class="problem-table">
+      <thead><tr><th>滞留日数</th><th>現在価格</th><th>商品名</th><th>損失機会</th><th>推奨アクション</th></tr></thead>
+      <tbody>
+        <tr><td><span class="days-badge critical">1,025日</span></td><td class="price-cell">¥5,686</td><td>FINAL FANTASY CRYSTAL CHRONICLES Switch</td><td>資金死蔵</td><td><span class="action-tag stop">即処分</span></td></tr>
+        <tr><td><span class="days-badge critical">1,019日</span></td><td class="price-cell">¥11,732</td><td>KORG DS-10 PLUS NINTENDO DS</td><td>資金死蔵</td><td><span class="action-tag stop">即処分</span></td></tr>
+        <tr><td><span class="days-badge critical">1,015日</span></td><td class="price-cell">¥3,160</td><td>Biohazard RE:2 PS3</td><td>資金死蔵</td><td><span class="action-tag stop">即処分</span></td></tr>
+        <tr><td><span class="days-badge critical">1,000日</span></td><td class="price-cell">¥6,971</td><td>Rain PS3 Sony PlayStation 3</td><td>資金死蔵</td><td><span class="action-tag stop">即処分</span></td></tr>
+        <tr><td><span class="days-badge critical">995日</span></td><td class="price-cell">¥11,472</td><td>KAMEN RIDER memory Switch BANDAI</td><td>資金死蔵</td><td><span class="action-tag stop">即処分</span></td></tr>
+        <tr><td><span class="days-badge critical">994日</span></td><td class="price-cell">¥3,226</td><td>Pokemon Ruby GBA Gameboy Advance</td><td>資金死蔵</td><td><span class="action-tag stop">即処分</span></td></tr>
+        <tr><td><span class="days-badge critical">970日</span></td><td class="price-cell">¥8,543</td><td>Rain PS3 Sony PlayStation 3</td><td>重複出品</td><td><span class="action-tag stop">即処分</span></td></tr>
+        <tr><td><span class="days-badge critical">965日</span></td><td class="price-cell">¥10,443</td><td>Samurai Jack Battle Nintendo Switch</td><td>資金死蔵</td><td><span class="action-tag stop">即処分</span></td></tr>
+        <tr><td><span class="days-badge critical">762日</span></td><td class="price-cell">¥7,667</td><td>DS Fire Emblem New Mystery</td><td>資金死蔵</td><td><span class="action-tag stop">即処分</span></td></tr>
+        <tr><td><span class="days-badge warning">569日</span></td><td class="price-cell">¥8,489</td><td>Donna Summer Japanese Singles Collection CD</td><td>低回転</td><td><span class="action-tag fix">値下げ</span></td></tr>
+        <tr><td><span class="days-badge warning">276日</span></td><td class="price-cell">¥19,222</td><td>Casio G-SHOCK GLX-5600</td><td>要見直し</td><td><span class="action-tag fix">値下げ</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div style="margin-top:20px;padding:16px;background:rgba(16,185,129,.06);border-radius:10px;border:1px solid rgba(16,185,129,.2)">
+      <div style="font-weight:700;color:#34d399;margin-bottom:8px">💡 処分後に回収できる資金と効果</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+        <div style="text-align:center;padding:10px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="font-size:20px;font-weight:800;color:#60a5fa">〜15万円</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">回収見込み（5割引）</div>
+        </div>
+        <div style="text-align:center;padding:10px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="font-size:20px;font-weight:800;color:#fbbf24">釣りリール×3</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">その資金で仕入可能</div>
+        </div>
+        <div style="text-align:center;padding:10px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="font-size:20px;font-weight:800;color:#34d399">+60万円</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">期待売上（追加仕入後）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== SECTION 2: SKU分析の誤解 ===== -->
+<div class="section" id="sec2">
+  <div class="section-header">
+    <div class="section-num amber">2</div>
+    <div class="section-title-group">
+      <h2>SKU管理の重大な誤解 <span class="impact high">改善必須</span></h2>
+      <p>SKUカテゴリと実際の商品が全く一致していない。これが分析・発注・在庫管理を混乱させている</p>
+    </div>
+  </div>
+
+  <div class="alert warning">
+    <div class="alert-icon">⚠️</div>
+    <div class="alert-body">
+      <div class="alert-title">SDP（カメラ・雑貨）SKUの中身を見ると…</div>
+      <div class="alert-text">G-SHOCK（10.4万円）、TISSOTムーンフェイズ（8.6万円）、KISEKIナイフ（8.3万円）、尺八（4.2万円）、AutoArtミニカー（7.6万円）が混在。「カメラ・雑貨」で管理されているが、実態は全カテゴリの寄せ集め。</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header"><div class="card-title">🔴 実際のSDPカテゴリ内容</div></div>
+      <table class="problem-table">
+        <tr><th>売上</th><th>実際の商品</th><th>正しいカテゴリ</th></tr>
+        <tr><td class="price-cell">¥103,611</td><td>Casio G-SHOCK DW-5600</td><td><span class="tag amber">時計</span></td></tr>
+        <tr><td class="price-cell">¥86,365</td><td>TISSOT Moonphase Vintage</td><td><span class="tag amber">時計</span></td></tr>
+        <tr><td class="price-cell">¥82,667</td><td>KISEKI Petty Knife</td><td><span class="tag green">刃物</span></td></tr>
+        <tr><td class="price-cell">¥76,498</td><td>AutoArt Porsche Carrera GT 1/18</td><td><span class="tag purple">ミニカー</span></td></tr>
+        <tr><td class="price-cell">¥70,958</td><td>AUTOart Nissan Skyline R34 1/18</td><td><span class="tag purple">ミニカー</span></td></tr>
+        <tr><td class="price-cell">¥57,321</td><td>LONGINES 847 Gold Watch</td><td><span class="tag amber">時計</span></td></tr>
+        <tr><td class="price-cell">¥41,667</td><td>Izundomei Shakuhachi 尺八</td><td><span class="tag blue">楽器</span></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">🔴 実際のSHカテゴリ内容</div></div>
+      <table class="problem-table">
+        <tr><th>売上</th><th>実際の商品</th><th>正しいカテゴリ</th></tr>
+        <tr><td class="price-cell">¥161,767</td><td>CITIZEN Attesa F900 GPS</td><td><span class="tag amber">時計</span></td></tr>
+        <tr><td class="price-cell">¥89,783</td><td>A Bathing Ape BAPEX Watch</td><td><span class="tag amber">時計</span></td></tr>
+        <tr><td class="price-cell">¥66,072</td><td>Copper Furo Windro Set</td><td><span class="tag blue">工芸品</span></td></tr>
+        <tr><td class="price-cell">¥63,480</td><td>Seiko Alba Alarm Digital Watch</td><td><span class="tag amber">時計</span></td></tr>
+        <tr><td class="price-cell">¥59,937</td><td>Spider-Man Magazine 1976</td><td><span class="tag purple">コレクション</span></td></tr>
+        <tr><td class="price-cell">¥37,304</td><td>Seiko Kinetic Watch</td><td><span class="tag amber">時計</span></td></tr>
+      </table>
+      <div style="margin-top:12px;padding:10px;background:rgba(245,158,11,.06);border-radius:8px;font-size:12px;color:#fbbf24">
+        ⚠ SH（工具・刃物）に時計が5本も混入。時計の売上が過小評価されている。
+      </div>
+    </div>
+  </div>
+
+  <div class="success-box">
+    <h3>✅ 真の商品ポートフォリオ（実態）</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+      <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:14px">
+        <div style="font-size:13px;font-weight:700;color:#fbbf24;margin-bottom:6px">⌚ 時計（隠れ最大）</div>
+        <div style="font-size:20px;font-weight:800">推定200万円+</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">複数SKUに分散</div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:14px">
+        <div style="font-size:13px;font-weight:700;color:#60a5fa;margin-bottom:6px">🎣 釣りリール</div>
+        <div style="font-size:20px;font-weight:800">176万円</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">明確な強み</div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:14px">
+        <div style="font-size:13px;font-weight:700;color:#a78bfa;margin-bottom:6px">🏎 ミニカー（発見）</div>
+        <div style="font-size:20px;font-weight:800">14.7万円</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">AutoArt 1/18特化</div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:14px">
+        <div style="font-size:13px;font-weight:700;color:#34d399;margin-bottom:6px">🔪 包丁・刃物</div>
+        <div style="font-size:20px;font-weight:800">25.5万円</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">競合少ない</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== SECTION 3: 即効スイッチ戦略 ===== -->
+<div class="section" id="sec3">
+  <div class="section-header">
+    <div class="section-num green">3</div>
+    <div class="section-title-group">
+      <h2>今すぐできる「品揃えスイッチ」 <span class="impact high">即効性高</span></h2>
+      <p>同じ仕入れ力で、単価3〜10倍の商品に切り替えるだけで売上が跳ね上がる</p>
+    </div>
+  </div>
+
+  <div class="alert info">
+    <div class="alert-icon">💡</div>
+    <div class="alert-body">
+      <div class="alert-title">nogi-japanが現在売っているゲームソフトを時計に置き換えると…</div>
+      <div class="alert-text">ゲームソフト平均¥6,581 × 55件 = 36.2万円 → 時計平均¥44,105 × 55件 = 242.6万円（6.7倍）。仕入れルートさえ確保すれば、明日から変えられる。</div>
+    </div>
+  </div>
+
+  <div class="opp-grid">
+    <div class="opp-card tier1">
+      <div class="opp-header">
+        <div class="opp-title">⌚ G-SHOCK 高級ライン<br><small style="color:var(--muted);font-weight:400">MTG / FROGMAN / OCEANUS</small></div>
+        <div class="opp-potential">+600万/月</div>
+      </div>
+      <div class="opp-body">
+        japans.watch.shopはMTG-B3000を13.4万円、FROGMAN GWF-A1000を17万円で即日売却。nogi-japanの現G-SHOCKは4万円台のエントリーモデル。高級ラインに絞るだけで単価3〜4倍。
+      </div>
+      <div class="opp-examples">
+        <div class="opp-example"><div class="opp-example-title">MTG-B3000D-1AJF Silver</div><div class="opp-example-price">¥134,306</div></div>
+        <div class="opp-example"><div class="opp-example-title">GWF-A1000XC FROGMAN Bluetooth</div><div class="opp-example-price">¥169,048</div></div>
+        <div class="opp-example"><div class="opp-example-title">GMW-B5000SS 50th Limited</div><div class="opp-example-price">¥150,464</div></div>
+        <div class="opp-example"><div class="opp-example-title">GCW-B5000 CARBON 40th</div><div class="opp-example-price">¥339,673</div></div>
+        <div class="opp-example"><div class="opp-example-title">OCEANUS OCW-S7000 Blue Manta</div><div class="opp-example-price">¥198,744</div></div>
+      </div>
+    </div>
+
+    <div class="opp-card tier1">
+      <div class="opp-header">
+        <div class="opp-title">⌚ HAMILTON 参入<br><small style="color:var(--muted);font-weight:400">Khaki / Ventura / Jazzmaster</small></div>
+        <div class="opp-potential">+200万/月</div>
+      </div>
+      <div class="opp-body">
+        HAMILTONはjapans.watch.shopが月17〜36万円で継続販売。入手性が高く（国内で買える）、海外での認知度抜群。nogi-japanはまだ0件。今すぐ参入余地あり。
+      </div>
+      <div class="opp-examples">
+        <div class="opp-example"><div class="opp-example-title">Khaki Aviation X-Wind H77616133</div><div class="opp-example-price">¥366,088</div></div>
+        <div class="opp-example"><div class="opp-example-title">Ventura Elvis80 Dragon Skeleton</div><div class="opp-example-price">¥318,574</div></div>
+        <div class="opp-example"><div class="opp-example-title">PSR MTX Matrix Black</div><div class="opp-example-price">¥268,504</div></div>
+        <div class="opp-example"><div class="opp-example-title">Ventura SHIBORI Tokyo Limited</div><div class="opp-example-price">¥274,268</div></div>
+        <div class="opp-example"><div class="opp-example-title">Jazzmaster Open Heart H32675551</div><div class="opp-example-price">¥206,460</div></div>
+      </div>
+    </div>
+
+    <div class="opp-card tier1">
+      <div class="opp-header">
+        <div class="opp-title">⌚ SEIKO 高額ライン<br><small style="color:var(--muted);font-weight:400">PROSPEX / ASTRON / PRESAGE</small></div>
+        <div class="opp-potential">+400万/月</div>
+      </div>
+      <div class="opp-body">
+        SEIKOの高額ラインは20〜49万円で売れている。nogi-japanはSEIKOを数本しか扱っていないが、実はjapans.watch.shopの主力カテゴリ。仕入れは国内で容易。
+      </div>
+      <div class="opp-examples">
+        <div class="opp-example"><div class="opp-example-title">SEIKO Prospex SBDC197 Diver's</div><div class="opp-example-price">¥177,899</div></div>
+        <div class="opp-example"><div class="opp-example-title">SEIKO ASTRON NEXTER SBXD029</div><div class="opp-example-price">¥282,696</div></div>
+        <div class="opp-example"><div class="opp-example-title">SEIKO PRESAGE SARX127 New</div><div class="opp-example-price">¥231,040</div></div>
+        <div class="opp-example"><div class="opp-example-title">Seiko G757 Digi Borg Wave</div><div class="opp-example-price">¥174,067 (1日で売却!)</div></div>
+        <div class="opp-example"><div class="opp-example-title">Seiko Giugiaro Reissue Limited</div><div class="opp-example-price">¥199,124 (6日で売却!)</div></div>
+      </div>
+    </div>
+
+    <div class="opp-card tier2">
+      <div class="opp-header">
+        <div class="opp-title">⌚ CITIZEN 高額ライン<br><small style="color:var(--muted);font-weight:400">ATTESA / THE CITIZEN / PROMASTER</small></div>
+        <div class="opp-potential">+200万/月</div>
+      </div>
+      <div class="opp-body">
+        nogi-japanはCITIZEN ATTESAで161,767円を達成した実績あり！この成功体験を横展開するだけ。japans.watch.shopはATTESSAで20〜30万円台を多数販売中。
+      </div>
+      <div class="opp-examples">
+        <div class="opp-example"><div class="opp-example-title">The Citizen Black Eagle AQ4054</div><div class="opp-example-price">¥304,180</div></div>
+        <div class="opp-example"><div class="opp-example-title">CITIZEN PROMASTER MARINE Eco</div><div class="opp-example-price">¥296,165</div></div>
+        <div class="opp-example"><div class="opp-example-title">CITIZEN AR5050-51L Eco-Drive One</div><div class="opp-example-price">¥265,113 (6日!)</div></div>
+        <div class="opp-example"><div class="opp-example-title">CITIZEN ATTESA ACT Line CC4050</div><div class="opp-example-price">¥214,509</div></div>
+      </div>
+    </div>
+
+    <div class="opp-card tier2">
+      <div class="opp-header">
+        <div class="opp-title">🏎 AutoArt 1/18 ミニカー<br><small style="color:var(--muted);font-weight:400">発掘済み！競合ほぼゼロ</small></div>
+        <div class="opp-potential">+100万/月</div>
+      </div>
+      <div class="opp-body">
+        nogi-japanがAutoArt Porsche Carrera GT 76,498円、Nissan Skyline R34 70,958円を販売済み。競合は市場全体で数件のみ。日本でしか入手できないRare品。月10〜20件で100万円規模。
+      </div>
+      <div class="opp-examples">
+        <div class="opp-example"><div class="opp-example-title">AutoArt Porsche Carrera GT Carbon</div><div class="opp-example-price">¥76,498 ★実績</div></div>
+        <div class="opp-example"><div class="opp-example-title">AUTOart Nissan Skyline GT-R R34</div><div class="opp-example-price">¥70,958 ★実績</div></div>
+        <div class="opp-example"><div class="opp-example-title">AutoArt 1/18 Limited Japan Edition</div><div class="opp-example-price">¥50,000〜</div></div>
+      </div>
+    </div>
+
+    <div class="opp-card tier2">
+      <div class="opp-header">
+        <div class="opp-title">🎋 日本伝統楽器<br><small style="color:var(--muted);font-weight:400">尺八・三味線・琴</small></div>
+        <div class="opp-potential">+50万/月</div>
+      </div>
+      <div class="opp-body">
+        nogi-japanが尺八（Shakuhachi）を41,667円で販売。利益率20.8%（¥8,649利益）。競合ほぼゼロ。日本人セラーの絶対的優位。海外の和楽器ファンは高値で購入する。
+      </div>
+      <div class="opp-examples">
+        <div class="opp-example"><div class="opp-example-title">Izundomei Shakuhachi 2 Shaku C</div><div class="opp-example-price">¥41,667 ★実績</div></div>
+        <div class="opp-example"><div class="opp-example-title">Kinko Ryu Shakuhachi 2.2 Shaku</div><div class="opp-example-price">¥19,925</div></div>
+        <div class="opp-example"><div class="opp-example-title">三味線・琴・太鼓セット</div><div class="opp-example-price">¥30,000〜</div></div>
+      </div>
+    </div>
+
+    <div class="opp-card tier3">
+      <div class="opp-header">
+        <div class="opp-title">🎣 釣りリール（強化）<br><small style="color:var(--muted);font-weight:400">SHIMANO Stella・DAIWA Saltiga</small></div>
+        <div class="opp-potential">+300万/月</div>
+      </div>
+      <div class="opp-body">
+        現在のリール平均3.4万円を上げる余地あり。競合のrinanten（94,082円のSHIMANO STELLA）に対し、nogi-japanのSTELLAは54,416円。同じ商品で4万円差。仕入れ・コンディション確認が鍵。
+      </div>
+      <div class="opp-examples">
+        <div class="opp-example"><div class="opp-example-title">SHIMANO STELLA（Rare 95年製）</div><div class="opp-example-price">¥94,082（競合）</div></div>
+        <div class="opp-example"><div class="opp-example-title">SHIMANO Calcutta Conquest DC</div><div class="opp-example-price">¥90,484 ★nogi実績</div></div>
+        <div class="opp-example"><div class="opp-example-title">Miya Epoch COMMAND X8</div><div class="opp-example-price">¥77,792 ★nogi実績</div></div>
+        <div class="opp-example"><div class="opp-example-title">Miya Epoch 1200 12V</div><div class="opp-example-price">¥72,291（競合）</div></div>
+        <div class="opp-example"><div class="opp-example-title">DAIWA EMERALDAS + ZPI</div><div class="opp-example-price">¥245,444 ★nogi最高!</div></div>
+      </div>
+    </div>
+
+    <div class="opp-card tier3">
+      <div class="opp-header">
+        <div class="opp-title">🔪 KISEKIナイフ展開<br><small style="color:var(--muted);font-weight:400">希晶・打刃物・Damascus</small></div>
+        <div class="opp-potential">+150万/月</div>
+      </div>
+      <div class="opp-body">
+        KISEKI Petty Knife 82,667円（利益率不明だが高額）を販売済み。競合でKISEKIは他に無し。包丁・刃物全体でも競合が極めて少ない。仕入れルートを増やすだけで大幅拡大可能。
+      </div>
+      <div class="opp-examples">
+        <div class="opp-example"><div class="opp-example-title">KISEKI Petty Yamazakura 251mm</div><div class="opp-example-price">¥82,667 ★実績</div></div>
+        <div class="opp-example"><div class="opp-example-title">Masumi Gyuto 33cm High Grade</div><div class="opp-example-price">¥31,051</div></div>
+        <div class="opp-example"><div class="opp-example-title">Seki Knife Chef Japanese Blade</div><div class="opp-example-price">¥29,162</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== SECTION 4: 競合から盗む ===== -->
+<div class="section" id="sec4">
+  <div class="section-header">
+    <div class="section-num blue">4</div>
+    <div class="section-title-group">
+      <h2>トップセラーのやり方をそのまま使う <span class="impact medium">参入可能</span></h2>
+      <p>3社の成功パターンを分解し、nogi-japanが今すぐ真似できる部分を抽出</p>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="card" style="border-top:3px solid #f59e0b">
+      <div class="card-header">
+        <div class="card-title">🥇 japans.watch.shop（月3,851万円・平均50,937円）の戦略分解</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px">
+        <div style="padding:14px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px">出品件数（3ヶ月）</div>
+          <div style="font-size:24px;font-weight:800">2,268件</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">月756件 / nogi比7.6倍</div>
+        </div>
+        <div style="padding:14px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px">平均売却日数</div>
+          <div style="font-size:24px;font-weight:800">91日</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">じっくり待つスタイル</div>
+        </div>
+        <div style="padding:14px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px">ポートフォリオ</div>
+          <div style="font-size:24px;font-weight:800">時計特化</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">中級65% / G-SHOCK22% / 高級4%</div>
+        </div>
+      </div>
+      <div style="padding:14px;background:rgba(245,158,11,.06);border-radius:8px;border:1px solid rgba(245,158,11,.15)">
+        <div style="font-size:13px;font-weight:700;color:#fbbf24;margin-bottom:8px">📖 真似すべき3点</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted2)">
+          <div>① <strong style="color:var(--text)">「月756件の物量」</strong> — 時計1カテゴリに絞って出品量を増やす。nogi-japanも釣りリール×時計の2本柱で月200件目指す</div>
+          <div>② <strong style="color:var(--text)">「待てる在庫」</strong> — 平均91日かけて売る。値下げせず価格を守る（資金力が必要）</div>
+          <div>③ <strong style="color:var(--text)">「ISSEY MIYAKEも扱う」</strong> — 時計以外もJ-ブランド時計（ISSEYミヤケ）を58,000円で販売中。nogi-japanも参考に</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-top:3px solid #94a3b8">
+      <div class="card-header">
+        <div class="card-title">🥈 japan_shop_71（月1,432万円・平均49,369円）の戦略分解</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px">
+        <div style="padding:14px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px">売却スピード</div>
+          <div style="font-size:24px;font-weight:800;color:#34d399">29日</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">高回転型。5日で26.5万円も</div>
+        </div>
+        <div style="padding:14px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px">特徴</div>
+          <div style="font-size:24px;font-weight:800">高級特化</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Grand Seiko / OMEGA中心</div>
+        </div>
+        <div style="padding:14px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px">最高単価</div>
+          <div style="font-size:24px;font-weight:800">31.9万円</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Grand Seiko SBGX263</div>
+        </div>
+      </div>
+      <div style="padding:14px;background:rgba(148,163,184,.06);border-radius:8px;border:1px solid rgba(148,163,184,.15)">
+        <div style="font-size:13px;font-weight:700;color:#94a3b8;margin-bottom:8px">📖 真似すべき3点</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted2)">
+          <div>① <strong style="color:var(--text)">「Grand Seiko注力」</strong> — 平均17万円、最高31.9万円。nogi-japanはゼロ。入手は難しいが1本で大きい</div>
+          <div>② <strong style="color:var(--text)">「CITIZEN ATTESSAの高額モデル」</strong> — 6日で26.5万円。nogi-japanのATTESSA16.2万円実績をさらに伸ばせる</div>
+          <div>③ <strong style="color:var(--text)">「高回転型」</strong> — 29日平均で売り切る値付け戦略。長期在庫にしない</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-top:3px solid #8b5cf6">
+      <div class="card-header">
+        <div class="card-title">🎴 game.and.anime.shop.sakura（月410万円・平均88,586円）の戦略</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div style="padding:14px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px">武器</div>
+          <div style="font-size:22px;font-weight:800;color:#a78bfa">PSA 10認定</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">グレーディングで価値5倍</div>
+        </div>
+        <div style="padding:14px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px">最高単価</div>
+          <div style="font-size:22px;font-weight:800;color:#a78bfa">90.5万円</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">PSA 10 Gol D Roger</div>
+        </div>
+      </div>
+      <div style="padding:14px;background:rgba(139,92,246,.06);border-radius:8px;border:1px solid rgba(139,92,246,.15)">
+        <div style="font-size:13px;font-weight:700;color:#a78bfa;margin-bottom:8px">📖 実践手順</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted2)">
+          <div>① ワンピースSECカード（Manga Alt Art / Comic Parallel）を未鑑定で出品 → 3〜5万円</div>
+          <div>② 同カードをPSA鑑定に出す（費用3,000〜5,000円） → PSA 10取得</div>
+          <div>③ PSA 10で再出品 → 即日20〜90万円で売れる</div>
+          <div>④ 高値ターゲット：<span class="tag purple">Gol D Roger OP09-118</span><span class="tag purple">Zoro OP06-118</span><span class="tag purple">Luffy OP09-119</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== SECTION 5: 隠れた強み ===== -->
+<div class="section" id="sec5">
+  <div class="section-header">
+    <div class="section-num purple">5</div>
+    <div class="section-title-group">
+      <h2>データが示す「隠れた強み」の発掘 <span class="impact medium">差別化可能</span></h2>
+      <p>他のセラーが気づいていない、nogi-japanだけのブルーオーシャン</p>
+    </div>
+  </div>
+
+  <div class="success-box">
+    <h3>✅ 誰も競合していないポジション3つ</h3>
+  </div>
+
+  <div class="opp-grid">
+    <div class="opp-card tier1" style="grid-column:span 1">
+      <div class="opp-header">
+        <div class="opp-title">🏎 AutoArt 1/18 ミニカー独占</div>
+        <div class="opp-potential">競合ゼロ</div>
+      </div>
+      <div class="opp-body">
+        全18,393件のデータでAutoArtを扱うセラーはnogi-japanのみ。Porsche 76,498円、Nissan R34 70,958円の実績あり。1/18スケールの日本限定版・廃盤品は海外コレクターから高値がつく。
+        <br><br>
+        <span class="tag purple">AutoArt</span><span class="tag purple">1/18 Scale</span><span class="tag purple">Japan Limited</span><span class="tag purple">Discontinued</span>
+      </div>
+    </div>
+
+    <div class="opp-card tier2" style="grid-column:span 1">
+      <div class="opp-header">
+        <div class="opp-title">🎋 日本伝統楽器（ほぼ独占）</div>
+        <div class="opp-potential">競合ほぼゼロ</div>
+      </div>
+      <div class="opp-body">
+        尺八41,667円（利益率20.8%）を販売。市場全体で同カテゴリは数件のみ。三味線・琴・津軽三味線・篠笛も需要あり。外国人の和楽器熱は高く、入手困難なため高値容認。
+        <br><br>
+        <span class="tag green">Shakuhachi</span><span class="tag green">Shamisen</span><span class="tag green">Koto</span><span class="tag green">Taiko Drum</span>
+      </div>
+    </div>
+
+    <div class="opp-card tier2" style="grid-column:span 1">
+      <div class="opp-header">
+        <div class="opp-title">⚙️ 日本工芸品（銅器・漆器）</div>
+        <div class="opp-potential">高利益率</div>
+      </div>
+      <div class="opp-body">
+        Copper Furo Windro Set（銅製風炉釜セット）66,072円を2件販売。利益率33.6%のGifu Chochin（岐阜提灯）22,152円も実績あり。競合ほぼゼロ。「Made in Japan」工芸品は欧米で根強い人気。
+        <br><br>
+        <span class="tag amber">Copper Furo</span><span class="tag amber">Gifu Chochin</span><span class="tag amber">Japanese Craft</span><span class="tag amber">Artisan</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-title" style="margin-bottom:16px">📊 nogi-japanの実績利益率 TOP10（判明分）</div>
+    <table class="problem-table">
+      <thead><tr><th>利益率</th><th>利益額</th><th>売上</th><th>商品</th></tr></thead>
+      <tbody>
+        <tr><td><span class="days-badge ok">49.9%</span></td><td style="color:#34d399;font-weight:700">¥6,927</td><td class="price-cell">¥13,872</td><td>Rent Original Soundtrack CD</td></tr>
+        <tr><td><span class="days-badge ok">49.6%</span></td><td style="color:#34d399;font-weight:700">¥5,342</td><td class="price-cell">¥10,766</td><td>Sandales Zori 草履 フランス語</td></tr>
+        <tr><td><span class="days-badge ok">43.5%</span></td><td style="color:#34d399;font-weight:700">¥37,565</td><td class="price-cell">¥86,365</td><td>TISSOT Moonphase Vintage ← 最高利益額</td></tr>
+        <tr><td><span class="days-badge ok">44.1%</span></td><td style="color:#34d399;font-weight:700">¥4,606</td><td class="price-cell">¥10,441</td><td>BIG Plush Anya Spy x Family</td></tr>
+        <tr><td><span class="days-badge warning">40.9%</span></td><td style="color:#fbbf24;font-weight:700">¥4,813</td><td class="price-cell">¥11,758</td><td>Ando Tadao Architecture Book</td></tr>
+        <tr><td><span class="days-badge warning">39.9%</span></td><td style="color:#fbbf24;font-weight:700">¥4,735</td><td class="price-cell">¥11,873</td><td>Weekly Playboy 1996 Gravure</td></tr>
+        <tr><td><span class="days-badge warning">34.2%</span></td><td style="color:#fbbf24;font-weight:700">¥9,348</td><td class="price-cell">¥27,333</td><td>Timex Vintage Military Watch</td></tr>
+        <tr><td><span class="days-badge warning">33.6%</span></td><td style="color:#fbbf24;font-weight:700">¥7,438</td><td class="price-cell">¥22,152</td><td>Gifu Chochin Lantern Set</td></tr>
+        <tr><td><span class="days-badge warning">20.8%</span></td><td style="color:#fbbf24;font-weight:700">¥8,649</td><td class="price-cell">¥41,667</td><td>Izundomei Shakuhachi 尺八</td></tr>
+        <tr><td><span class="days-badge warning">20.3%</span></td><td style="color:#fbbf24;font-weight:700">¥7,585</td><td class="price-cell">¥37,394</td><td>Panasonic LUMIX FX100</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:12px;padding:12px;background:rgba(16,185,129,.06);border-radius:8px;font-size:13px;color:var(--muted2)">
+      💡 <strong style="color:#34d399">TISSOT Moonphase</strong>は43.5%利益率で37,565円の利益。これが最優先で横展開すべき商品。TISSOTのヴィンテージ時計をもっと仕入れること。
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== SECTION 6: タイトル最適化 ===== -->
+<div class="section" id="sec6">
+  <div class="section-header">
+    <div class="section-num cyan">6</div>
+    <div class="section-title-group">
+      <h2>タイトル最適化で検索露出を3倍に <span class="impact medium">今すぐ無料</span></h2>
+      <p>仕入れゼロで売上を上げられる。eBayの検索アルゴリズムに最適なタイトル構造</p>
+    </div>
+  </div>
+
+  <div class="alert success">
+    <div class="alert-icon">✅</div>
+    <div class="alert-body">
+      <div class="alert-title">eBayタイトルの黄金法則（80文字以内）</div>
+      <div class="alert-text">「ブランド + モデル番号 + 特徴（色/素材/機能）+ コンディション + 信頼ワード」の順で並べる。10万円以上売れている商品は必ずモデル番号が入っている。</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:24px">
+    <div class="title-row">
+      <div class="title-label bad">❌ Before（nogi-japanの実際のタイトル）</div>
+      <div class="title-before">DAIWA EMERALDAS 2506W IOS ZPI 2007 Full Tune Spinning Reel Fishing Reel</div>
+      <div class="title-label good" style="margin-top:8px">✅ After（最適化後）</div>
+      <div class="title-after">[RARE] DAIWA EMERALDAS 2506W IOS ZPI Custom 2007 Spinning Fishing Reel Japan | Electric | Excellent Used</div>
+      <div class="title-note">追加ワード: [RARE] / Custom / Japan / Excellent Used → 希少性・品質を前面に出す</div>
+    </div>
+
+    <div class="title-row">
+      <div class="title-label bad">❌ Before</div>
+      <div class="title-before">KISEKI Petty Knife Yamazakura Kiseki ultra hard alloy 251mm</div>
+      <div class="title-label good" style="margin-top:8px">✅ After</div>
+      <div class="title-after">KISEKI Petty Knife 251mm Yamazakura Japanese Ultra Hard Alloy Steel Chef Kitchen | Handmade Japan | Authentic</div>
+      <div class="title-note">追加ワード: Japanese / Steel / Chef Kitchen / Handmade Japan / Authentic → 欧米バイヤーの検索語を網羅</div>
+    </div>
+
+    <div class="title-row">
+      <div class="title-label bad">❌ Before（G-SHOCK）</div>
+      <div class="title-before">Casio G SHOCK DW 5600 Speed Watch Restored Vintage Mint Condition</div>
+      <div class="title-label good" style="margin-top:8px">✅ After</div>
+      <div class="title-after">CASIO G-SHOCK DW-5600 Speed Indicator Vintage Japan Domestic JDM | Solar Wave | Restored Mint | Authentic</div>
+      <div class="title-note">追加ワード: JDM / Japan Domestic / Solar Wave → 海外バイヤーが日本限定品を検索するキーワード</div>
+    </div>
+
+    <div class="title-row">
+      <div class="title-label bad">❌ Before（釣りリール）</div>
+      <div class="title-before">Shimano Calcutta 201XT Ultegra 1000SDH Fishing Reels Set</div>
+      <div class="title-label good" style="margin-top:8px">✅ After</div>
+      <div class="title-after">SHIMANO Calcutta 201XT + Ultegra 1000SDH Baitcasting Fishing Reel Set Japan | Ready to Use | Excellent Condition</div>
+      <div class="title-note">追加ワード: Baitcasting / Japan / Ready to Use / Excellent Condition → 機能・品質を具体的に</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="margin-bottom:14px">💎 必ず入れる「魔法の単語」リスト（10万円以上の商品に共通）</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div style="padding:12px;background:rgba(59,130,246,.06);border-radius:8px;border:1px solid rgba(59,130,246,.1)">
+        <div style="font-size:11px;color:#60a5fa;font-weight:700;margin-bottom:8px">📦 コンディション系</div>
+        <div><span class="tag mono">[Top Mint]</span><span class="tag mono">[Near Mint]</span><span class="tag mono">[Excellent]</span><span class="tag mono">Unused</span><span class="tag mono">New in Box</span><span class="tag mono">Tested Working</span></div>
+      </div>
+      <div style="padding:12px;background:rgba(16,185,129,.06);border-radius:8px;border:1px solid rgba(16,185,129,.1)">
+        <div style="font-size:11px;color:#34d399;font-weight:700;margin-bottom:8px">🇯🇵 希少性系</div>
+        <div><span class="tag mono">Japan Domestic JDM</span><span class="tag mono">Limited Edition</span><span class="tag mono">Rare</span><span class="tag mono">Authentic Genuine</span><span class="tag mono">From Japan</span></div>
+      </div>
+      <div style="padding:12px;background:rgba(245,158,11,.06);border-radius:8px;border:1px solid rgba(245,158,11,.1)">
+        <div style="font-size:11px;color:#fbbf24;font-weight:700;margin-bottom:8px">🎣 釣り専用</div>
+        <div><span class="tag mono">Ready to Use</span><span class="tag mono">Fully Functional</span><span class="tag mono">Full Tune</span><span class="tag mono">Electric Reel</span><span class="tag mono">PE Line Included</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== SECTION 7: 利益率改善 ===== -->
+<div class="section" id="sec7">
+  <div class="section-header">
+    <div class="section-num amber">7</div>
+    <div class="section-title-group">
+      <h2>利益率の改善ポイント <span class="impact medium">収益直結</span></h2>
+      <p>仕入れ原価が不明な商品が多いが、eBay手数料と発送コストの最適化で利益率を底上げできる</p>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <h3>⚠️ データから見える利益を下げている可能性</h3>
+    <ul class="warning-list">
+      <li>釣りリールの多くが利益¥0 → 仕入れ原価未入力か、実際に利益薄い可能性</li>
+      <li>送料無料設定の商品が多い → 重量物（リール等）は送料損失が発生しやすい</li>
+      <li>長期在庫（181日+）の平均単価¥7,086 → 低単価商品が倉庫を占拠</li>
+      <li>広告費（eBay Promoted Listings）の費用対効果が不明</li>
+    </ul>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px">⚡ 即実行できる利益率改善5ステップ</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="padding:12px;background:rgba(255,255,255,.04);border-radius:8px;display:flex;align-items:flex-start;gap:10px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(239,68,68,.2);color:#f87171;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">1</div>
+          <div><div style="font-weight:700;margin-bottom:2px">重量物は送料別建てに変更</div><div style="font-size:12px;color:var(--muted)">釣りリール（2〜4kg）を送料込みにすると1〜3万円の損失。送料別で出品し、EMS/国際宅急便の実費を請求する</div></div>
+        </div>
+        <div style="padding:12px;background:rgba(255,255,255,.04);border-radius:8px;display:flex;align-items:flex-start;gap:10px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(245,158,11,.2);color:#fbbf24;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">2</div>
+          <div><div style="font-weight:700;margin-bottom:2px">仕入れ原価を全件入力する</div><div style="font-size:12px;color:var(--muted)">現在のデータで利益¥0の商品が多数。原価入力がないと利益追跡ができず、赤字商品に気づけない</div></div>
+        </div>
+        <div style="padding:12px;background:rgba(255,255,255,.04);border-radius:8px;display:flex;align-items:flex-start;gap:10px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(16,185,129,.2);color:#34d399;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">3</div>
+          <div><div style="font-weight:700;margin-bottom:2px">時計はコンディション（状態）で+30%</div><div style="font-size:12px;color:var(--muted)">「Unused/未使用」「New in Box/箱付き」の記載で同一商品が30%高く売れる。japans.watch.shopは必ず記載</div></div>
+        </div>
+        <div style="padding:12px;background:rgba(255,255,255,.04);border-radius:8px;display:flex;align-items:flex-start;gap:10px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(59,130,246,.2);color:#60a5fa;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">4</div>
+          <div><div style="font-weight:700;margin-bottom:2px">30日以上売れていない商品は値下げ</div><div style="font-size:12px;color:var(--muted)">30日で−5%、60日で−10%、90日で−15%のルールを設ける。长期在庫より現金回収を優先</div></div>
+        </div>
+        <div style="padding:12px;background:rgba(255,255,255,.04);border-radius:8px;display:flex;align-items:flex-start;gap:10px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(139,92,246,.2);color:#a78bfa;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">5</div>
+          <div><div style="font-weight:700;margin-bottom:2px">eBay Promoted Listings を高単価のみに絞る</div><div style="font-size:12px;color:var(--muted)">広告費は売上の2〜4%。¥5,000以下の商品への広告は費用対効果が悪い。3万円以上の商品のみに集中</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px">📈 カテゴリ別 推奨利益率目標</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="padding:10px 14px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-weight:700">⌚ 時計（中級）</span>
+            <span style="color:#34d399;font-weight:800">目標 30〜40%</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted)">TISSOT Moonphase実績43.5%。仕入れ価格の管理が鍵</div>
+        </div>
+        <div style="padding:10px 14px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-weight:700">🔪 包丁・刃物</span>
+            <span style="color:#34d399;font-weight:800">目標 35〜50%</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted)">競合少なく高値維持。KISEKIは特に高利益率期待</div>
+        </div>
+        <div style="padding:10px 14px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-weight:700">🎋 工芸品・楽器</span>
+            <span style="color:#34d399;font-weight:800">目標 30〜50%</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted)">岐阜提灯33.6%、尺八20.8%の実績。価格設定に余裕あり</div>
+        </div>
+        <div style="padding:10px 14px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-weight:700">🎣 釣りリール</span>
+            <span style="color:#fbbf24;font-weight:800">目標 20〜30%</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted)">送料・梱包コストが高い。正確な原価管理必須</div>
+        </div>
+        <div style="padding:10px 14px;background:rgba(255,255,255,.04);border-radius:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-weight:700">🎮 ゲーム（継続分）</span>
+            <span style="color:#f87171;font-weight:800">撤退推奨</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted)">利益率が低く、長期在庫化リスクが高い</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== SECTION 8: 90日行動計画 ===== -->
+<div class="section" id="sec8">
+  <div class="section-header">
+    <div class="section-num green">8</div>
+    <div class="section-title-group">
+      <h2>90日 具体的行動計画 <span class="impact high">実行プラン</span></h2>
+      <p>毎週・毎月単位で「何を・いつまでに・どうするか」を明確化</p>
+    </div>
+  </div>
+
+  <div class="month-grid">
+    <div class="month-card">
+      <div class="month-header">
+        <div>
+          <div class="month-label">Month 1（1ヶ月目）</div>
+          <div style="font-size:12px;color:var(--muted)">止める＋整える</div>
+        </div>
+        <div class="month-goal">目標: 350万円</div>
+      </div>
+      <div class="month-body">
+        <div class="month-item">
+          <div class="month-item-icon">🚨</div>
+          <div class="month-item-text"><strong>Week1: 長期在庫を全処分</strong>1,000日以上のゲームソフト・CD等を50%引きで一括出品。回収額〜15万円を次の仕入れに</div>
+        </div>
+        <div class="month-item">
+          <div class="month-item-icon">⌚</div>
+          <div class="month-item-text"><strong>Week2: SEIKO/HAMILTON 仕入れ開始</strong>ハードオフ・質屋・ネットオフで月20本目標。1本1〜3万で仕入れ、4〜15万で販売</div>
+        </div>
+        <div class="month-item">
+          <div class="month-item-icon">🔤</div>
+          <div class="month-item-text"><strong>Week3: 全出品タイトル最適化</strong>既存出品のタイトルを黄金法則で書き直し。コンディション表記を必ず追加</div>
+        </div>
+        <div class="month-item">
+          <div class="month-item-icon">📦</div>
+          <div class="month-item-text"><strong>Week4: 重量物の送料体系見直し</strong>釣りリール・工具の送料を別建てに変更。実費+梱包料で設定</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="month-card">
+      <div class="month-header">
+        <div>
+          <div class="month-label">Month 2（2ヶ月目）</div>
+          <div style="font-size:12px;color:var(--muted)">増やす＋磨く</div>
+        </div>
+        <div class="month-goal">目標: 700万円</div>
+      </div>
+      <div class="month-body">
+        <div class="month-item">
+          <div class="month-item-icon">⌚</div>
+          <div class="month-item-text"><strong>時計出品を月50件に拡大</strong>SEIKO PROSPEX / ASTRON / CITIZEN ATTESA を重点仕入れ。平均4万円で月200万円</div>
+        </div>
+        <div class="month-item">
+          <div class="month-item-icon">🎣</div>
+          <div class="month-item-text"><strong>釣りリールの上位モデル注力</strong>DAIWA EMERALDAS / SHIMANO Calcutta Conquest を月10本目標。平均7万円で70万円</div>
+        </div>
+        <div class="month-item">
+          <div class="month-item-icon">🏎</div>
+          <div class="month-item-text"><strong>AutoArt 1/18ミニカー開拓</strong>廃盤・限定品を月5本仕入れ。1本5〜8万円で25〜40万円</div>
+        </div>
+        <div class="month-item">
+          <div class="month-item-icon">🔪</div>
+          <div class="month-item-text"><strong>KISEKI・日本刃物を月10本以上</strong>関の包丁産地・秋葉原専門店から仕入れルート開拓</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="month-card">
+      <div class="month-header">
+        <div>
+          <div class="month-label">Month 3（3ヶ月目）</div>
+          <div style="font-size:12px;color:var(--muted)">跳ねる</div>
+        </div>
+        <div class="month-goal">目標: 1,200万円</div>
+      </div>
+      <div class="month-body">
+        <div class="month-item">
+          <div class="month-item-icon">💰</div>
+          <div class="month-item-text"><strong>G-SHOCK高級ライン参入</strong>MTG-B3000 / OCEANUS / FROGMANを月20本。平均15万円で300万円</div>
+        </div>
+        <div class="month-item">
+          <div class="month-item-icon">🃏</div>
+          <div class="month-item-text"><strong>ワンピースTCG PSA鑑定開始</strong>SEC カードをPSAに出し始める。PSA 10取得後に20〜90万円で出品</div>
+        </div>
+        <div class="month-item">
+          <div class="month-item-icon">🎋</div>
+          <div class="month-item-text"><strong>日本伝統楽器・工芸品 本格展開</strong>尺八・三味線・漆器を月20件。平均3万円で60万円</div>
+        </div>
+        <div class="month-item">
+          <div class="month-item-icon">🤝</div>
+          <div class="month-item-text"><strong>仕入れパートナー・外注化</strong>出品作業を外注し、自身は仕入れ・戦略に集中。月200件体制へ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL KPI -->
+  <div style="background:linear-gradient(135deg,rgba(59,130,246,.1),rgba(139,92,246,.1),rgba(16,185,129,.1));border:1px solid rgba(59,130,246,.2);border-radius:14px;padding:28px;margin-top:24px">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:14px;color:var(--muted2);margin-bottom:8px">3ヶ月後のnogi-japan 予測</div>
+      <div style="font-size:48px;font-weight:900;background:linear-gradient(90deg,#60a5fa,#a78bfa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent">月1,200万円</div>
+      <div style="font-size:14px;color:var(--muted2);margin-top:8px">現状214万円 → <strong style="color:#fbbf24">5.6倍</strong>（この計画を実行した場合）</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
+      <div style="text-align:center;padding:14px;background:rgba(255,255,255,.05);border-radius:10px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">時計</div>
+        <div style="font-size:20px;font-weight:800;color:#60a5fa">+600万円</div>
+      </div>
+      <div style="text-align:center;padding:14px;background:rgba(255,255,255,.05);border-radius:10px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">釣りリール</div>
+        <div style="font-size:20px;font-weight:800;color:#34d399">+200万円</div>
+      </div>
+      <div style="text-align:center;padding:14px;background:rgba(255,255,255,.05);border-radius:10px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">刃物・工芸品</div>
+        <div style="font-size:20px;font-weight:800;color:#a78bfa">+100万円</div>
+      </div>
+      <div style="text-align:center;padding:14px;background:rgba(255,255,255,.05);border-radius:10px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">TCG・その他</div>
+        <div style="font-size:20px;font-weight:800;color:#fbbf24">+86万円</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div style="background:var(--card);border-top:1px solid var(--border);padding:20px 32px;text-align:center;margin-top:48px">
+  <div style="font-size:13px;color:var(--muted)">
+    <a href="index.html" style="color:#60a5fa;text-decoration:none">← ダッシュボードに戻る</a>
+    &nbsp;|&nbsp; データ期間: 2026年1月〜3月 | 18,393件分析 | 生成: 2026.03.22
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.jump-btn').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    const id = btn.getAttribute('href');
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
