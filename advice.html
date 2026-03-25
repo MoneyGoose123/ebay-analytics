@@ -263,6 +263,7 @@
 <div class="jump-nav">
   <a class="jump-btn" href="#sec-active">🔥 今すぐ売れる39件</a>
   <a class="jump-btn" href="#sec-ad">📢 広告最適化</a>
+  <a class="jump-btn" href="#sec-myprofit">💰 自社利益分析</a>
   <a class="jump-btn" href="#sec-profit">💹 利益集計分析</a>
   <a class="jump-btn" href="#sec-latest">📈 最新販売データ</a>
   <a class="jump-btn" href="#sec-game">🎮 ゲーム削除リスト</a>
@@ -457,6 +458,188 @@
     </div>
   </div>
 </div>
+
+<div class="divider"></div>
+
+<!-- ===== SECTION MY-PROFIT: 自社利益管理表分析 ===== -->
+<div class="section" id="sec-myprofit">
+  <div class="section-header">
+    <div class="section-num green">💰</div>
+    <div class="section-title-group">
+      <h2>自社利益分析（2025年5月〜2026年3月・735件） <span class="impact high">実利益率17.2%</span></h2>
+      <p>利益計算シート（ebay-nogi）の売上個別データから、粗利・消費税還付込みの実利益を月次集計。消費税還付が全利益の37%を占める重要構造が明確に。</p>
+    </div>
+  </div>
+
+  <!-- KPIカード -->
+  <div class="grid4" style="margin-bottom:24px">
+    <div class="kpi-card">
+      <div class="kpi-val" style="color:#60a5fa">1,456万円</div>
+      <div class="kpi-label">全期間売上合計</div>
+      <div class="kpi-sub">2025-05〜2026-03（11ヶ月）</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val" style="color:#34d399">137万円</div>
+      <div class="kpi-label">粗利合計（9.4%）</div>
+      <div class="kpi-sub">送料・手数料控除後</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val" style="color:#a78bfa">93万円</div>
+      <div class="kpi-label">消費税還付合計</div>
+      <div class="kpi-sub">利益の<strong style="color:#fbbf24">37%</strong>を占める</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val" style="color:#fbbf24">251万円</div>
+      <div class="kpi-label">実利益合計（17.2%）</div>
+      <div class="kpi-sub">1件あたり平均 3,414円</div>
+    </div>
+  </div>
+
+  <!-- 月次グラフ -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <span class="card-title">月次推移：売上 / 粗利 / 実利益</span>
+    </div>
+    <canvas id="myProfitChart" height="120"></canvas>
+  </div>
+
+  <!-- 消費税還付の重要性アラート -->
+  <div class="alert amber" style="margin-bottom:20px">
+    <strong>⚠️ 消費税還付が利益の37%！ 還付がなければ利益は半分以下</strong><br>
+    粗利137万円 ＋ 消費税還付93万円 ＝ 実利益251万円。消費税の還付申告を毎年必ず実施すること。還付を受け取らないと実質的に年間93万円を捨てることになる。
+  </div>
+
+  <!-- カテゴリ別利益 -->
+  <div class="grid2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-header"><span class="card-title">商品カテゴリ別 実利益率</span></div>
+      <table class="tbl">
+        <thead><tr><th>カテゴリ</th><th>件数</th><th>売上</th><th>実利益率</th></tr></thead>
+        <tbody>
+          <tr><td>📷 カメラ</td><td>14件</td><td>47.1万円</td><td><span class="badge green">21.9%</span></td></tr>
+          <tr><td>⌚ 腕時計</td><td>116件</td><td>506.8万円</td><td><span class="badge green">18.7%</span></td></tr>
+          <tr><td>🎣 釣り具</td><td>60件</td><td>195.2万円</td><td><span class="badge green">15.7%</span></td></tr>
+          <tr><td>🎮 ゲーム</td><td>173件</td><td>104.1万円</td><td><span class="badge amber">11.3%</span></td></tr>
+          <tr><td>📦 その他</td><td>372件</td><td>602.9万円</td><td><span class="badge green">17.2%</span></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:10px;color:var(--muted2);font-size:12px">カメラ・腕時計が高利益率。ゲームは11.3%（撒き餌として機能）</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">仕入先別 粗利率・注意点</span></div>
+      <table class="tbl">
+        <thead><tr><th>仕入先</th><th>件数</th><th>粗利率</th><th>判定</th></tr></thead>
+        <tbody>
+          <tr><td>メルカリ</td><td>599件</td><td>10.0%</td><td><span class="badge green">✅ メイン</span></td></tr>
+          <tr><td>Amazon（大文字）</td><td>27件</td><td>3.3%</td><td><span class="badge amber">要注意</span></td></tr>
+          <tr><td>amazon（小文字）</td><td>42件</td><td>-0.4%</td><td><span class="badge red">⚠️ 赤字</span></td></tr>
+          <tr><td>ヤフー</td><td>30件</td><td>-8.7%</td><td><span class="badge red">🚫 NG</span></td></tr>
+          <tr><td>楽天</td><td>5件</td><td>-1.0%</td><td><span class="badge red">⚠️ 赤字</span></td></tr>
+          <tr><td>ビルディ</td><td>2件</td><td>-3.1%</td><td><span class="badge red">⚠️ 赤字</span></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:10px;color:var(--muted2);font-size:12px">ヤフー・楽天・ビルディは粗利がマイナス。消費税還付で最終的に黒転する場合もあるが原則避けるべき</p>
+    </div>
+  </div>
+
+  <!-- TOP利益商品 -->
+  <div class="grid2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-header"><span class="card-title">TOP10 利益商品</span></div>
+      <table class="tbl">
+        <thead><tr><th>月</th><th>商品名（略）</th><th>売上</th><th>利益</th></tr></thead>
+        <tbody>
+          <tr><td>2025-09</td><td>Tudor Sub 76100 Vintage 40mm</td><td>218,282</td><td><span style="color:#34d399;font-weight:700">43,156</span></td></tr>
+          <tr><td>2025-12</td><td>SEIKO Astron GPS Solar Ceramic</td><td>131,333</td><td><span style="color:#34d399;font-weight:700">40,955</span></td></tr>
+          <tr><td>2025-09</td><td>Tudor Sub 79090 Oysterdate</td><td>205,289</td><td><span style="color:#34d399;font-weight:700">38,083</span></td></tr>
+          <tr><td>2026-01</td><td>Citizen Attesa F900 GPS Eco Titanium</td><td>162,143</td><td><span style="color:#34d399;font-weight:700">36,882</span></td></tr>
+          <tr><td>2026-01</td><td>Tissot Moonphase Triple Calendar</td><td>84,535</td><td><span style="color:#34d399;font-weight:700">36,060</span></td></tr>
+          <tr><td>2025-09</td><td>Bulova Day Date Super Seville Auto</td><td>94,306</td><td><span style="color:#34d399;font-weight:700">32,792</span></td></tr>
+          <tr><td>2025-10</td><td>Seiko King Seiko 5626 Overhauled</td><td>102,940</td><td><span style="color:#34d399;font-weight:700">32,064</span></td></tr>
+          <tr><td>2025-10</td><td>Panasonic DC-GH5 + LUMIX 14-42mm</td><td>144,303</td><td><span style="color:#34d399;font-weight:700">29,122</span></td></tr>
+          <tr><td>2026-02</td><td>DAIWA Seaborg 150S Electric Reel</td><td>42,318</td><td><span style="color:#34d399;font-weight:700">27,600</span></td></tr>
+          <tr><td>2025-08</td><td>Citizen New Master 1969 Vintage</td><td>72,882</td><td><span style="color:#34d399;font-weight:700">24,559</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">赤字商品 TOP10（要確認）</span></div>
+      <table class="tbl">
+        <thead><tr><th>月</th><th>商品名（略）</th><th>売上</th><th>損失</th></tr></thead>
+        <tbody>
+          <tr><td>2025-07</td><td>Anime Expo Kagurabachi T-Shirt XL</td><td>13,267</td><td><span style="color:#ef4444;font-weight:700">-13,748</span></td></tr>
+          <tr><td>2025-09</td><td>Hagi Ware Matcha Chawan（返金？）</td><td>0</td><td><span style="color:#ef4444;font-weight:700">-6,357</span></td></tr>
+          <tr><td>2025-09</td><td>Tsubamesanjo Veg Knife（返金？）</td><td>0</td><td><span style="color:#ef4444;font-weight:700">-5,841</span></td></tr>
+          <tr><td>2026-01</td><td>Showa Kokeshi Set（9個）</td><td>17,889</td><td><span style="color:#ef4444;font-weight:700">-5,232</span></td></tr>
+          <tr><td>2025-11</td><td>Citizen Eco Drive Air Divers</td><td>24,285</td><td><span style="color:#ef4444;font-weight:700">-4,311</span></td></tr>
+          <tr><td>2025-11</td><td>Zojirushi Electric Grill EA VS65</td><td>16,532</td><td><span style="color:#ef4444;font-weight:700">-3,760</span></td></tr>
+          <tr><td>2026-02</td><td>Copper Furo Windro + Kama Kettle</td><td>65,577</td><td><span style="color:#ef4444;font-weight:700">-2,918</span></td></tr>
+          <tr><td>2025-06</td><td>Band-Maid 10th Anniversary Blu-ray</td><td>11,176</td><td><span style="color:#ef4444;font-weight:700">-2,470</span></td></tr>
+          <tr><td>2025-12</td><td>Dragon Ball Z Manga Set 1-24巻</td><td>12,876</td><td><span style="color:#ef4444;font-weight:700">-2,356</span></td></tr>
+          <tr><td>2025-08</td><td>Gameboy Pocket Monsters Green（返金？）</td><td>0</td><td><span style="color:#ef4444;font-weight:700">-2,354</span></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:10px;color:var(--muted2);font-size:12px">売上0円の赤字は返金・キャンセル後の送料等の損失の可能性。Tシャツ・Blu-ray・マンガは薄利危険ゾーン</p>
+    </div>
+  </div>
+
+  <!-- アクションポイント -->
+  <div class="card">
+    <div class="card-header"><span class="card-title">利益データからの具体的アクション</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div>
+        <p style="color:#34d399;font-weight:700;margin-bottom:8px">✅ 強化すべきもの</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px">
+          <li>⌚ <strong>腕時計の仕入れ強化</strong> — 利益率18.7%、Tudorは1本4万円超</li>
+          <li>📷 <strong>カメラ系も高効率</strong> — 21.9%の最高利益率（件数を増やす）</li>
+          <li>🎣 <strong>釣り具は安定稼働</strong> — DAIWA Seaborg系は高単価で収益大</li>
+          <li>🏦 <strong>消費税還付は毎年必ず申告</strong> — 年間80〜100万円規模</li>
+        </ul>
+      </div>
+      <div>
+        <p style="color:#ef4444;font-weight:700;margin-bottom:8px">❌ 見直すべきもの</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px">
+          <li>🛑 <strong>ヤフー仕入れは原則NG</strong> — 粗利-8.7%（30件・17万円の赤字仕入れ）</li>
+          <li>⚠️ <strong>Amazon仕入れは個別判断</strong> — 粗利ほぼゼロ、商品選定が肝</li>
+          <li>👕 <strong>Tシャツ・Blu-ray類は危険</strong> — 薄利＋返品リスク高</li>
+          <li>📚 <strong>マンガセットは要注意</strong> — 重い・破損リスク・薄利</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const months = ['5月','6月','7月','8月','9月','10月','11月','12月','1月','2月','3月'];
+  const labels = months.map((m,i) => i < 8 ? '2025/'+m : '2026/'+m);
+  const sales   = [616243,414172,1150114,719458,2072243,1462651,2095402,1217445,1551230,1917875,1344201];
+  const gross   = [39811,23809,50954,84365,144069,172376,216141,149429,222651,84343,178790];
+  const profit  = [94008,60697,147963,134675,308241,286922,373888,230363,357753,247759,267236];
+  const ctx = document.getElementById('myProfitChart');
+  if(ctx) new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        {label:'売上（円）',data:sales,backgroundColor:'rgba(59,130,246,0.25)',borderColor:'#3b82f6',borderWidth:1,yAxisID:'y'},
+        {label:'粗利（円）',data:gross,backgroundColor:'rgba(16,185,129,0.4)',borderColor:'#10b981',borderWidth:2,type:'bar',yAxisID:'y'},
+        {label:'実利益（円）',data:profit,backgroundColor:'rgba(245,158,11,0.0)',borderColor:'#f59e0b',borderWidth:2.5,type:'line',tension:0.4,pointRadius:4,yAxisID:'y'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:true,
+      plugins:{legend:{labels:{color:'#94a3b8',font:{size:12}}}},
+      scales:{
+        x:{ticks:{color:'#64748b'},grid:{color:'rgba(255,255,255,0.03)'}},
+        y:{ticks:{color:'#64748b',callback:v=>(v/10000).toFixed(0)+'万'},grid:{color:'rgba(255,255,255,0.06)'},title:{display:true,text:'円',color:'#64748b'}}
+      }
+    }
+  });
+})();
+</script>
 
 <div class="divider"></div>
 
