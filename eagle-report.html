@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EAGLE 売上レポート 2025年度</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --bg2: #161b22;
+      --bg3: #21262d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text2: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --yellow: #d29922;
+      --purple: #bc8cff;
+      --orange: #ffa657;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ヘッダー */
+    header {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 900; color: #fff;
+    }
+    .logo-text h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+    .logo-text p { font-size: 12px; color: var(--text2); }
+    .period-badge {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 12px;
+      color: var(--text2);
+    }
+    .period-badge span { color: var(--accent); font-weight: 600; }
+
+    /* メインコンテンツ */
+    main { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+    /* セクションタイトル */
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 16px;
+    }
+
+    /* KPIカード */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .kpi-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .kpi-card.blue::before { background: var(--accent); }
+    .kpi-card.green::before { background: var(--green); }
+    .kpi-card.purple::before { background: var(--purple); }
+    .kpi-card.orange::before { background: var(--orange); }
+
+    .kpi-label {
+      font-size: 11px;
+      color: var(--text2);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1.2;
+    }
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 6px;
+    }
+    .kpi-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-top: 8px;
+    }
+    .kpi-badge.up { background: rgba(63,185,80,0.15); color: var(--green); }
+    .kpi-badge.down { background: rgba(248,81,73,0.15); color: var(--red); }
+
+    /* チャートグリッド */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .chart-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .chart-card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .chart-card p {
+      font-size: 12px;
+      color: var(--text2);
+      margin-bottom: 20px;
+    }
+    .chart-wrap {
+      position: relative;
+      height: 260px;
+    }
+
+    /* 月別テーブル */
+    .table-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .table-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .table-header h3 { font-size: 14px; font-weight: 600; }
+    .table-header p { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      padding: 10px 20px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+    }
+    thead th:not(:first-child) { text-align: right; }
+    tbody td {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    tbody td:not(:first-child) { text-align: right; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+    .month-label { font-weight: 600; }
+    .bar-cell { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+    .bar-bg {
+      flex: 1;
+      max-width: 120px;
+      height: 6px;
+      background: var(--bg3);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--purple));
+    }
+    .change-up { color: var(--green); font-size: 12px; }
+    .change-down { color: var(--red); font-size: 12px; }
+    .change-na { color: var(--text2); font-size: 12px; }
+    .fy-row { background: rgba(88,166,255,0.05); }
+    .fy-row td { border-left: 2px solid var(--accent); }
+
+    /* 通貨別 */
+    .currency-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .currency-table tbody td:first-child {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .currency-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* トレンドサマリー */
+    .trend-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .trend-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .trend-card h4 {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    .trend-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .trend-item:last-child { border-bottom: none; }
+    .trend-item-label { font-size: 12px; color: var(--text2); }
+    .trend-item-value { font-size: 13px; font-weight: 600; }
+
+    /* フッター */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 20px 32px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text2);
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 900px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .chart-grid { grid-template-columns: 1fr; }
+      .currency-grid { grid-template-columns: 1fr; }
+      .trend-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">E</div>
+    <div class="logo-text">
+      <h1>EAGLE 売上レポート</h1>
+      <p>eBay 海外販売 実績サマリー</p>
+    </div>
+  </div>
+  <div class="period-badge">
+    対象期間: <span>2025年4月1日 〜 2026年3月31日</span>
+    &nbsp;|&nbsp; データ確定: <span>2025年10月20日時点</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- KPIカード -->
+  <div class="section-title" style="margin-bottom:16px;">Key Performance Indicators</div>
+  <div class="kpi-grid">
+    <div class="kpi-card blue">
+      <div class="kpi-label">年度累計売上（円換算）</div>
+      <div class="kpi-value" style="color:var(--accent);">¥10.48億</div>
+      <div class="kpi-sub">2025年4月〜10月20日</div>
+      <div class="kpi-badge up">▲ +132.8% 前期比</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">累計販売個数</div>
+      <div class="kpi-value" style="color:var(--green);">61,651個</div>
+      <div class="kpi-sub">2025年4月〜10月20日</div>
+      <div class="kpi-badge up">▲ +112.3% 前期比</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">月平均売上</div>
+      <div class="kpi-value" style="color:var(--purple);">¥1.50億</div>
+      <div class="kpi-sub">7ヶ月平均（4月〜10月）</div>
+      <div class="kpi-badge up">▲ 最高月 ¥1.92億</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">日平均売上</div>
+      <div class="kpi-value" style="color:var(--orange);">¥516万</div>
+      <div class="kpi-sub">203日間の平均</div>
+      <div class="kpi-badge up">▲ 2025年8月がピーク</div>
+    </div>
+  </div>
+
+  <!-- メインチャート -->
+  <div class="section-title">売上トレンド</div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>月別売上高の推移（全期間）</h3>
+      <p>2024年12月〜2025年10月 ｜ 棒グラフ: 売上高（円）、折れ線: 販売個数</p>
+      <div class="chart-wrap">
+        <canvas id="mainChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>通貨別売上シェア</h3>
+      <p>2025年4月〜10月 ｜ 合計 ¥10.48億</p>
+      <div class="chart-wrap">
+        <canvas id="currencyChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 日別推移 -->
+  <div class="chart-card" style="margin-bottom:32px;">
+    <h3>日別売上推移（2025年4月〜10月）</h3>
+    <p>対象期間の日次売上高（円換算）</p>
+    <div class="chart-wrap" style="height:200px;">
+      <canvas id="dailyChart"></canvas>
+    </div>
+  </div>
+
+  <!-- 月別テーブル -->
+  <div class="section-title">月別詳細</div>
+  <div class="table-card" style="margin-bottom:32px;">
+    <div class="table-header">
+      <h3>月別売上サマリー（全期間）</h3>
+      <p>青ハイライト行が今期（2025年4月〜）対象期間</p>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>月</th>
+          <th>売上高（円）</th>
+          <th>販売個数</th>
+          <th>前月比</th>
+          <th>売上バー</th>
+        </tr>
+      </thead>
+      <tbody id="monthlyTable"></tbody>
+    </table>
+  </div>
+
+  <!-- 通貨別 & サマリー -->
+  <div class="section-title">内訳分析（2025年4月〜10月）</div>
+  <div class="currency-grid">
+    <div class="table-card" style="margin-bottom:0;">
+      <div class="table-header">
+        <h3>通貨別売上内訳</h3>
+        <p>売上高・個数・シェア</p>
+      </div>
+      <table class="currency-table">
+        <thead>
+          <tr>
+            <th>通貨</th>
+            <th>売上（円）</th>
+            <th>個数</th>
+            <th>シェア</th>
+          </tr>
+        </thead>
+        <tbody id="currencyTable"></tbody>
+      </table>
+    </div>
+
+    <div class="trend-card" style="background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:0; overflow:hidden;">
+      <div class="table-header" style="padding:16px 20px; border-bottom:1px solid var(--border);">
+        <h3>期間サマリー</h3>
+        <p>主要指標まとめ</p>
+      </div>
+      <div style="padding:16px 20px;">
+        <div class="trend-item">
+          <span class="trend-item-label">データ確定期間</span>
+          <span class="trend-item-value">203日間</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-item-label">最高売上月</span>
+          <span class="trend-item-value" style="color:var(--green);">2025年8月</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-item-label">最高月売上</span>
+          <span class="trend-item-value" style="color:var(--green);">¥192,373,684</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-item-label">最高月販売個数</span>
+          <span class="trend-item-value" style="color:var(--green);">11,932個</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-item-label">前期合計（12〜3月）</span>
+          <span class="trend-item-value">¥450,266,704</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-item-label">当期累計（4月〜）</span>
+          <span class="trend-item-value" style="color:var(--accent);">¥1,048,337,425</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-item-label">前期比成長率</span>
+          <span class="trend-item-value" style="color:var(--green);">+132.8%</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-item-label">主要通貨（USD）シェア</span>
+          <span class="trend-item-value">93.9%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  EAGLE 在庫管理システム &nbsp;|&nbsp; 生成日: 2026年4月4日 &nbsp;|&nbsp; データソース: EAGLE経由の売上.xlsx
+</footer>
+
+<script>
+// ===== データ =====
+const allMonthly = [
+  {month:'2024-12', jpy:114458137, qty:6761, label:'24年12月'},
+  {month:'2025-01', jpy:117342923, qty:7252, label:'25年1月'},
+  {month:'2025-02', jpy:98925472,  qty:6788, label:'25年2月'},
+  {month:'2025-03', jpy:119540172, qty:8235, label:'25年3月'},
+  {month:'2025-04', jpy:132339713, qty:8727, label:'25年4月'},
+  {month:'2025-05', jpy:143921256, qty:9726, label:'25年5月'},
+  {month:'2025-06', jpy:167826922, qty:11196,label:'25年6月'},
+  {month:'2025-07', jpy:174853172, qty:11111,label:'25年7月'},
+  {month:'2025-08', jpy:192373684, qty:11932,label:'25年8月'},
+  {month:'2025-09', jpy:140687190, qty:5551, label:'25年9月'},
+  {month:'2025-10', jpy:96335488,  qty:3408, label:'25年10月'},
+];
+
+const currencyData = [
+  {currency:'USD', jpy:984532829, qty:58374, pct:93.9, color:'#58a6ff'},
+  {currency:'EUR', jpy:25083882,  qty:1081,  pct:2.4,  color:'#bc8cff'},
+  {currency:'GBP', jpy:24193306,  qty:1406,  pct:2.3,  color:'#3fb950'},
+  {currency:'AUD', jpy:11653888,  qty:630,   pct:1.1,  color:'#ffa657'},
+  {currency:'CAD', jpy:2873522,   qty:160,   pct:0.3,  color:'#d29922'},
+];
+
+const dailyData = [
+  {date:'2025-04-01',jpy:3807645,qty:250},{date:'2025-04-02',jpy:4086581,qty:264},{date:'2025-04-03',jpy:3460255,qty:293},{date:'2025-04-04',jpy:4643716,qty:311},{date:'2025-04-05',jpy:4319098,qty:326},{date:'2025-04-06',jpy:4100076,qty:319},{date:'2025-04-07',jpy:4211165,qty:274},{date:'2025-04-08',jpy:3613470,qty:261},{date:'2025-04-09',jpy:3810885,qty:275},{date:'2025-04-10',jpy:4174753,qty:291},{date:'2025-04-11',jpy:4327502,qty:305},{date:'2025-04-12',jpy:3747462,qty:258},{date:'2025-04-13',jpy:3392588,qty:267},{date:'2025-04-14',jpy:4286272,qty:398},{date:'2025-04-15',jpy:3815449,qty:261},{date:'2025-04-16',jpy:3331535,qty:260},{date:'2025-04-17',jpy:4610218,qty:306},{date:'2025-04-18',jpy:5339131,qty:299},{date:'2025-04-19',jpy:6552205,qty:317},{date:'2025-04-20',jpy:4907308,qty:286},{date:'2025-04-21',jpy:4993262,qty:317},{date:'2025-04-22',jpy:4727873,qty:292},{date:'2025-04-23',jpy:4176878,qty:287},{date:'2025-04-24',jpy:4566591,qty:277},{date:'2025-04-25',jpy:4792452,qty:308},{date:'2025-04-26',jpy:5158623,qty:306},{date:'2025-04-27',jpy:4882220,qty:283},{date:'2025-04-28',jpy:4895098,qty:298},{date:'2025-04-29',jpy:4200931,qty:269},{date:'2025-04-30',jpy:5408472,qty:269},{date:'2025-05-01',jpy:4296607,qty:291},{date:'2025-05-02',jpy:4824060,qty:312},{date:'2025-05-03',jpy:4943836,qty:300},{date:'2025-05-04',jpy:4902880,qty:302},{date:'2025-05-05',jpy:3768349,qty:398},{date:'2025-05-06',jpy:3970635,qty:288},{date:'2025-05-07',jpy:5021800,qty:324},{date:'2025-05-08',jpy:5141889,qty:314},{date:'2025-05-09',jpy:4390192,qty:296},{date:'2025-05-10',jpy:4514550,qty:319},{date:'2025-05-11',jpy:4945459,qty:339},{date:'2025-05-12',jpy:5058195,qty:352},{date:'2025-05-13',jpy:4051815,qty:312},{date:'2025-05-14',jpy:4052548,qty:269},{date:'2025-05-15',jpy:4303925,qty:301},{date:'2025-05-16',jpy:3920218,qty:261},{date:'2025-05-17',jpy:3755999,qty:301},{date:'2025-05-18',jpy:3546788,qty:258},{date:'2025-05-19',jpy:4073934,qty:309},{date:'2025-05-20',jpy:4433229,qty:286},{date:'2025-05-21',jpy:4023403,qty:272},{date:'2025-05-22',jpy:5510804,qty:328},{date:'2025-05-23',jpy:4382663,qty:326},{date:'2025-05-24',jpy:5011090,qty:380},{date:'2025-05-25',jpy:5043181,qty:357},{date:'2025-05-26',jpy:5649583,qty:324},{date:'2025-05-27',jpy:6062238,qty:289},{date:'2025-05-28',jpy:5456821,qty:311},{date:'2025-05-29',jpy:4658381,qty:306},{date:'2025-05-30',jpy:5417265,qty:364},{date:'2025-05-31',jpy:4788921,qty:337},{date:'2025-06-01',jpy:4574769,qty:352},{date:'2025-06-02',jpy:4844068,qty:334},{date:'2025-06-03',jpy:5209350,qty:349},{date:'2025-06-04',jpy:3776365,qty:304},{date:'2025-06-05',jpy:4940274,qty:326},{date:'2025-06-06',jpy:6213309,qty:393},{date:'2025-06-07',jpy:4890819,qty:364},{date:'2025-06-08',jpy:4795491,qty:359},{date:'2025-06-09',jpy:5485147,qty:415},{date:'2025-06-10',jpy:5478854,qty:372},{date:'2025-06-11',jpy:4828123,qty:367},{date:'2025-06-12',jpy:7031035,qty:395},{date:'2025-06-13',jpy:4758420,qty:352},{date:'2025-06-14',jpy:5826321,qty:411},{date:'2025-06-15',jpy:5563927,qty:404},{date:'2025-06-16',jpy:7810308,qty:459},{date:'2025-06-17',jpy:5527311,qty:420},{date:'2025-06-18',jpy:4530553,qty:348},{date:'2025-06-19',jpy:5942235,qty:412},{date:'2025-06-20',jpy:7896259,qty:377},{date:'2025-06-21',jpy:7818809,qty:423},{date:'2025-06-22',jpy:5326107,qty:371},{date:'2025-06-23',jpy:5833975,qty:367},{date:'2025-06-24',jpy:6924401,qty:332},{date:'2025-06-25',jpy:5207288,qty:402},{date:'2025-06-26',jpy:5744741,qty:334},{date:'2025-06-27',jpy:4287883,qty:385},{date:'2025-06-28',jpy:5211132,qty:341},{date:'2025-06-29',jpy:6282963,qty:372},{date:'2025-06-30',jpy:5266686,qty:356},{date:'2025-07-01',jpy:4974025,qty:374},{date:'2025-07-02',jpy:6188731,qty:368},{date:'2025-07-03',jpy:5495333,qty:410},{date:'2025-07-04',jpy:7558352,qty:436},{date:'2025-07-05',jpy:5193615,qty:370},{date:'2025-07-06',jpy:5341479,qty:396},{date:'2025-07-07',jpy:5055545,qty:361},{date:'2025-07-08',jpy:5525811,qty:368},{date:'2025-07-09',jpy:5106456,qty:320},{date:'2025-07-10',jpy:5772565,qty:363},{date:'2025-07-11',jpy:6163165,qty:368},{date:'2025-07-12',jpy:4902157,qty:375},{date:'2025-07-13',jpy:4024916,qty:327},{date:'2025-07-14',jpy:6267503,qty:322},{date:'2025-07-15',jpy:5772878,qty:329},{date:'2025-07-16',jpy:6348405,qty:399},{date:'2025-07-17',jpy:5337864,qty:323},{date:'2025-07-18',jpy:5812221,qty:369},{date:'2025-07-19',jpy:4820375,qty:377},{date:'2025-07-20',jpy:5217776,qty:356},{date:'2025-07-21',jpy:8463668,qty:404},{date:'2025-07-22',jpy:4391701,qty:316},{date:'2025-07-23',jpy:4833195,qty:313},{date:'2025-07-24',jpy:6104654,qty:330},{date:'2025-07-25',jpy:5684790,qty:376},{date:'2025-07-26',jpy:6424751,qty:351},{date:'2025-07-27',jpy:5632762,qty:336},{date:'2025-07-28',jpy:6033522,qty:349},{date:'2025-07-29',jpy:4934892,qty:330},{date:'2025-07-30',jpy:6523646,qty:333},{date:'2025-07-31',jpy:4946418,qty:362},{date:'2025-08-01',jpy:4947144,qty:366},{date:'2025-08-02',jpy:8341561,qty:409},{date:'2025-08-03',jpy:6932208,qty:395},{date:'2025-08-04',jpy:7443731,qty:390},{date:'2025-08-05',jpy:6968552,qty:396},{date:'2025-08-06',jpy:5927829,qty:378},{date:'2025-08-07',jpy:8133258,qty:409},{date:'2025-08-08',jpy:5437699,qty:393},{date:'2025-08-09',jpy:9940771,qty:754},{date:'2025-08-10',jpy:11970414,qty:966},{date:'2025-08-11',jpy:8278723,qty:558},{date:'2025-08-12',jpy:7212082,qty:572},{date:'2025-08-13',jpy:6785108,qty:488},{date:'2025-08-14',jpy:6500407,qty:432},{date:'2025-08-15',jpy:6807884,qty:485},{date:'2025-08-16',jpy:5887004,qty:398},{date:'2025-08-17',jpy:5074911,qty:399},{date:'2025-08-18',jpy:6053495,qty:327},{date:'2025-08-19',jpy:5813187,qty:393},{date:'2025-08-20',jpy:5173042,qty:283},{date:'2025-08-21',jpy:5613765,qty:305},{date:'2025-08-22',jpy:4501219,qty:282},{date:'2025-08-23',jpy:5388109,qty:379},{date:'2025-08-24',jpy:5322444,qty:253},{date:'2025-08-25',jpy:5835014,qty:251},{date:'2025-08-26',jpy:3974360,qty:226},{date:'2025-08-27',jpy:4393150,qty:218},{date:'2025-08-28',jpy:4452235,qty:231},{date:'2025-08-29',jpy:4623289,qty:206},{date:'2025-08-30',jpy:3474150,qty:199},{date:'2025-08-31',jpy:5166939,qty:191},{date:'2025-09-01',jpy:3354681,qty:176},{date:'2025-09-02',jpy:5909181,qty:217},{date:'2025-09-03',jpy:4651125,qty:194},{date:'2025-09-04',jpy:4591456,qty:184},{date:'2025-09-05',jpy:5893489,qty:200},{date:'2025-09-06',jpy:3941708,qty:176},{date:'2025-09-07',jpy:4478727,qty:181},{date:'2025-09-08',jpy:4262669,qty:185},{date:'2025-09-09',jpy:5090199,qty:179},{date:'2025-09-10',jpy:3394150,qty:154},{date:'2025-09-11',jpy:4739973,qty:205},{date:'2025-09-12',jpy:4484321,qty:254},{date:'2025-09-13',jpy:4239261,qty:169},{date:'2025-09-14',jpy:3484724,qty:142},{date:'2025-09-15',jpy:3307595,qty:155},{date:'2025-09-16',jpy:6753114,qty:166},{date:'2025-09-17',jpy:4363064,qty:165},{date:'2025-09-18',jpy:3746416,qty:186},{date:'2025-09-19',jpy:4884335,qty:207},{date:'2025-09-20',jpy:4191790,qty:156},{date:'2025-09-21',jpy:3068061,qty:132},{date:'2025-09-22',jpy:4771454,qty:197},{date:'2025-09-23',jpy:4410183,qty:195},{date:'2025-09-24',jpy:3909997,qty:166},{date:'2025-09-25',jpy:5263819,qty:183},{date:'2025-09-26',jpy:5021120,qty:201},{date:'2025-09-27',jpy:5385010,qty:177},{date:'2025-09-28',jpy:6864966,qty:233},{date:'2025-09-29',jpy:6868840,qty:232},{date:'2025-09-30',jpy:5361761,qty:184},{date:'2025-10-01',jpy:4819138,qty:186},{date:'2025-10-02',jpy:4714111,qty:188},{date:'2025-10-03',jpy:5277501,qty:203},{date:'2025-10-04',jpy:4554835,qty:199},{date:'2025-10-05',jpy:4919955,qty:193},{date:'2025-10-06',jpy:6661741,qty:182},{date:'2025-10-07',jpy:4110541,qty:165},{date:'2025-10-08',jpy:5173150,qty:182},{date:'2025-10-09',jpy:5296169,qty:181},{date:'2025-10-10',jpy:5242501,qty:190},{date:'2025-10-11',jpy:4550174,qty:162},{date:'2025-10-12',jpy:3724113,qty:158},{date:'2025-10-13',jpy:5719673,qty:185},{date:'2025-10-14',jpy:3306709,qty:130},{date:'2025-10-15',jpy:6121708,qty:206},{date:'2025-10-16',jpy:3570817,qty:133},{date:'2025-10-17',jpy:4464259,qty:151},{date:'2025-10-18',jpy:3523416,qty:148},{date:'2025-10-19',jpy:4434279,qty:116},{date:'2025-10-20',jpy:6150698,qty:150},
+];
+
+// ===== 月別テーブル =====
+const fyMonths = ['2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10'];
+const maxJpy = Math.max(...allMonthly.map(m => m.jpy));
+const tbody = document.getElementById('monthlyTable');
+allMonthly.forEach((m, i) => {
+  const prev = allMonthly[i-1];
+  const change = prev ? ((m.jpy / prev.jpy - 1) * 100).toFixed(1) : null;
+  const isFy = fyMonths.includes(m.month);
+  const pct = (m.jpy / maxJpy * 100).toFixed(1);
+  const tr = document.createElement('tr');
+  if(isFy) tr.className = 'fy-row';
+  tr.innerHTML = `
+    <td><span class="month-label">${m.label}</span>${isFy ? ' <span style="font-size:10px;color:var(--accent);background:rgba(88,166,255,0.15);padding:2px 6px;border-radius:4px;">今期</span>' : ''}</td>
+    <td>¥${m.jpy.toLocaleString()}</td>
+    <td>${m.qty.toLocaleString()}個</td>
+    <td>${change === null
+      ? '<span class="change-na">—</span>'
+      : change >= 0
+        ? `<span class="change-up">▲ +${change}%</span>`
+        : `<span class="change-down">▼ ${change}%</span>`
+    }</td>
+    <td>
+      <div class="bar-cell">
+        <div class="bar-bg"><div class="bar-fill" style="width:${pct}%"></div></div>
+        <span style="font-size:11px;color:var(--text2);width:40px;text-align:right;">${pct}%</span>
+      </div>
+    </td>
+  `;
+  tbody.appendChild(tr);
+});
+
+// ===== 通貨テーブル =====
+const ctbody = document.getElementById('currencyTable');
+currencyData.forEach(c => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><span class="currency-dot" style="background:${c.color}"></span>${c.currency}</td>
+    <td>¥${c.jpy.toLocaleString()}</td>
+    <td>${c.qty.toLocaleString()}個</td>
+    <td><span style="color:${c.color};font-weight:600;">${c.pct}%</span></td>
+  `;
+  ctbody.appendChild(tr);
+});
+
+// ===== チャート: メイン（棒+折れ線） =====
+const ctx1 = document.getElementById('mainChart').getContext('2d');
+new Chart(ctx1, {
+  data: {
+    labels: allMonthly.map(m => m.label),
+    datasets: [
+      {
+        type: 'bar',
+        label: '売上高（円）',
+        data: allMonthly.map(m => m.jpy),
+        backgroundColor: allMonthly.map(m =>
+          fyMonths.includes(m.month) ? 'rgba(88,166,255,0.8)' : 'rgba(88,166,255,0.3)'
+        ),
+        borderRadius: 4,
+        yAxisID: 'y',
+      },
+      {
+        type: 'line',
+        label: '販売個数',
+        data: allMonthly.map(m => m.qty),
+        borderColor: '#ffa657',
+        backgroundColor: 'rgba(255,166,87,0.1)',
+        pointBackgroundColor: '#ffa657',
+        tension: 0.4,
+        yAxisID: 'y2',
+        pointRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: {
+        labels: { color: '#8b949e', font: { size: 11 } }
+      },
+      tooltip: {
+        backgroundColor: '#21262d',
+        borderColor: '#30363d',
+        borderWidth: 1,
+        titleColor: '#e6edf3',
+        bodyColor: '#8b949e',
+        callbacks: {
+          label: ctx => ctx.dataset.label === '売上高（円）'
+            ? `売上: ¥${ctx.raw.toLocaleString()}`
+            : `個数: ${ctx.raw.toLocaleString()}個`
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { color: '#8b949e', font: {size:11} }, grid: { color: '#21262d' } },
+      y: {
+        ticks: { color: '#8b949e', font:{size:11}, callback: v => '¥'+Math.round(v/1e6)+'M' },
+        grid: { color: '#30363d' }
+      },
+      y2: {
+        position: 'right',
+        ticks: { color: '#ffa657', font:{size:11}, callback: v => v.toLocaleString()+'個' },
+        grid: { drawOnChartArea: false }
+      }
+    }
+  }
+});
+
+// ===== チャート: 通貨ドーナツ =====
+const ctx2 = document.getElementById('currencyChart').getContext('2d');
+new Chart(ctx2, {
+  type: 'doughnut',
+  data: {
+    labels: currencyData.map(c => c.currency),
+    datasets: [{
+      data: currencyData.map(c => c.jpy),
+      backgroundColor: currencyData.map(c => c.color),
+      borderWidth: 2,
+      borderColor: '#161b22',
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '65%',
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { color: '#8b949e', font:{size:11}, padding: 12, boxWidth: 12 }
+      },
+      tooltip: {
+        backgroundColor: '#21262d',
+        borderColor: '#30363d',
+        borderWidth: 1,
+        titleColor: '#e6edf3',
+        bodyColor: '#8b949e',
+        callbacks: {
+          label: ctx => ` ${ctx.label}: ${ctx.parsed.toLocaleString()}円 (${currencyData[ctx.dataIndex].pct}%)`
+        }
+      }
+    }
+  }
+});
+
+// ===== チャート: 日別 =====
+const ctx3 = document.getElementById('dailyChart').getContext('2d');
+new Chart(ctx3, {
+  type: 'line',
+  data: {
+    labels: dailyData.map(d => d.date),
+    datasets: [{
+      label: '日別売上（円）',
+      data: dailyData.map(d => d.jpy),
+      borderColor: '#58a6ff',
+      backgroundColor: 'rgba(88,166,255,0.08)',
+      fill: true,
+      tension: 0.3,
+      pointRadius: 0,
+      borderWidth: 1.5,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#21262d',
+        borderColor: '#30363d',
+        borderWidth: 1,
+        titleColor: '#e6edf3',
+        bodyColor: '#8b949e',
+        callbacks: {
+          label: ctx => `¥${ctx.raw.toLocaleString()}`
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: '#8b949e', font:{size:10}, maxTicksLimit: 12,
+          callback: (val, i) => dailyData[i]?.date.slice(5) ?? ''
+        },
+        grid: { color: '#21262d' }
+      },
+      y: {
+        ticks: { color: '#8b949e', font:{size:10}, callback: v => '¥'+Math.round(v/1e6)+'M' },
+        grid: { color: '#30363d' }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
