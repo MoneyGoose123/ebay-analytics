@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EAGLE - eBay海外販売 実績ショーケース 2025年度</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0e17;
+      --bg2: #111827;
+      --bg3: #1e293b;
+      --border: #1e293b;
+      --text: #f1f5f9;
+      --text2: #94a3b8;
+      --accent: #3b82f6;
+      --accent-light: #60a5fa;
+      --green: #22c55e;
+      --green-light: #4ade80;
+      --red: #ef4444;
+      --yellow: #eab308;
+      --purple: #a855f7;
+      --orange: #f97316;
+      --gold: #fbbf24;
+      --cyan: #06b6d4;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ===== HERO SECTION ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 24px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at 30% 20%, rgba(59,130,246,0.15) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 80%, rgba(168,85,247,0.1) 0%, transparent 50%),
+                  radial-gradient(ellipse at 50% 50%, rgba(6,182,212,0.05) 0%, transparent 70%);
+      animation: float 20s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(30px, -20px) rotate(1deg); }
+      66% { transform: translate(-20px, 15px) rotate(-1deg); }
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 900px; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(59,130,246,0.15);
+      border: 1px solid rgba(59,130,246,0.3);
+      border-radius: 100px;
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-light);
+      margin-bottom: 32px;
+      animation: fadeInUp 0.8s ease;
+    }
+    .hero-badge .dot {
+      width: 8px; height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    .hero-logo {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 42px; font-weight: 900; color: #fff;
+      margin: 0 auto 28px;
+      box-shadow: 0 20px 60px rgba(59,130,246,0.3);
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -2px;
+      margin-bottom: 16px;
+      animation: fadeInUp 0.8s ease 0.1s both;
+    }
+    .hero h1 .highlight {
+      background: linear-gradient(135deg, var(--accent-light), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(16px, 2.5vw, 22px);
+      color: var(--text2);
+      margin-bottom: 48px;
+      animation: fadeInUp 0.8s ease 0.2s both;
+    }
+
+    .hero-number {
+      font-size: clamp(72px, 12vw, 140px);
+      font-weight: 900;
+      letter-spacing: -6px;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--orange) 50%, var(--red) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+      animation: fadeInUp 0.8s ease 0.3s both;
+    }
+    .hero-number-label {
+      font-size: clamp(18px, 3vw, 28px);
+      font-weight: 700;
+      color: var(--text2);
+      margin-bottom: 12px;
+      animation: fadeInUp 0.8s ease 0.35s both;
+    }
+    .hero-growth {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(34,197,94,0.12);
+      border: 1px solid rgba(34,197,94,0.3);
+      border-radius: 100px;
+      padding: 10px 24px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--green-light);
+      animation: fadeInUp 0.8s ease 0.4s both;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 2s ease-in-out infinite;
+      color: var(--text2);
+      font-size: 13px;
+      text-align: center;
+    }
+    .scroll-hint .arrow {
+      display: block;
+      font-size: 24px;
+      margin-top: 4px;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+
+    /* ===== SECTION COMMON ===== */
+    section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-light);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .section-label::before {
+      content: '';
+      width: 24px; height: 2px;
+      background: var(--accent);
+      border-radius: 1px;
+    }
+    .section-heading {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.2;
+      margin-bottom: 48px;
+    }
+
+    /* ===== KPI CARDS ===== */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 60px;
+    }
+    .kpi-card {
+      background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    .kpi-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 16px 16px 0 0;
+    }
+    .kpi-card.c-blue::after { background: linear-gradient(90deg, var(--accent), var(--cyan)); }
+    .kpi-card.c-green::after { background: linear-gradient(90deg, var(--green), #10b981); }
+    .kpi-card.c-purple::after { background: linear-gradient(90deg, var(--purple), #c084fc); }
+    .kpi-card.c-orange::after { background: linear-gradient(90deg, var(--orange), var(--gold)); }
+
+    .kpi-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+    .kpi-card.c-blue .kpi-icon { background: rgba(59,130,246,0.15); }
+    .kpi-card.c-green .kpi-icon { background: rgba(34,197,94,0.15); }
+    .kpi-card.c-purple .kpi-icon { background: rgba(168,85,247,0.15); }
+    .kpi-card.c-orange .kpi-icon { background: rgba(249,115,22,0.15); }
+
+    .kpi-label {
+      font-size: 12px;
+      color: var(--text2);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .kpi-value {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+    }
+    .kpi-card.c-blue .kpi-value { color: var(--accent-light); }
+    .kpi-card.c-green .kpi-value { color: var(--green-light); }
+    .kpi-card.c-purple .kpi-value { color: #c084fc; }
+    .kpi-card.c-orange .kpi-value { color: var(--gold); }
+
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 8px;
+    }
+    .kpi-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 100px;
+      margin-top: 10px;
+      background: rgba(34,197,94,0.12);
+      color: var(--green-light);
+    }
+
+    /* ===== CHART SECTIONS ===== */
+    .chart-row {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .chart-panel {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+    }
+    .chart-panel h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .chart-panel .chart-desc {
+      font-size: 13px;
+      color: var(--text2);
+      margin-bottom: 24px;
+    }
+    .chart-wrap { position: relative; height: 300px; }
+
+    /* ===== GROWTH STORY ===== */
+    .story-section {
+      background: linear-gradient(180deg, var(--bg) 0%, rgba(17,24,39,0.5) 100%);
+    }
+    .story-timeline {
+      position: relative;
+      padding-left: 48px;
+    }
+    .story-timeline::before {
+      content: '';
+      position: absolute;
+      left: 18px; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent), var(--purple), var(--green));
+    }
+    .story-item {
+      position: relative;
+      margin-bottom: 48px;
+    }
+    .story-item:last-child { margin-bottom: 0; }
+    .story-dot {
+      position: absolute;
+      left: -38px; top: 4px;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      border: 3px solid;
+      background: var(--bg);
+    }
+    .story-item.phase1 .story-dot { border-color: var(--accent); }
+    .story-item.phase2 .story-dot { border-color: var(--orange); }
+    .story-item.phase3 .story-dot { border-color: var(--green); }
+
+    .story-period {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .story-item.phase1 .story-period { color: var(--accent-light); }
+    .story-item.phase2 .story-period { color: var(--orange); }
+    .story-item.phase3 .story-period { color: var(--green-light); }
+
+    .story-title {
+      font-size: 22px;
+      font-weight: 900;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+    .story-desc {
+      font-size: 14px;
+      color: var(--text2);
+      line-height: 1.8;
+      max-width: 600px;
+    }
+    .story-stats {
+      display: flex;
+      gap: 24px;
+      margin-top: 16px;
+    }
+    .story-stat {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 20px;
+      text-align: center;
+    }
+    .story-stat-value {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+    .story-stat-label {
+      font-size: 11px;
+      color: var(--text2);
+      margin-top: 2px;
+    }
+
+    /* ===== COMPARISON BANNER ===== */
+    .comparison-banner {
+      background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(168,85,247,0.08));
+      border: 1px solid rgba(59,130,246,0.2);
+      border-radius: 20px;
+      padding: 40px;
+      margin-top: 60px;
+      text-align: center;
+    }
+    .comparison-banner h3 {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 32px;
+      letter-spacing: -0.5px;
+    }
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+    .comp-block { text-align: center; }
+    .comp-block-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .comp-block-value {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -2px;
+    }
+    .comp-block-sub {
+      font-size: 13px;
+      color: var(--text2);
+      margin-top: 4px;
+    }
+    .comp-arrow {
+      font-size: 32px;
+      color: var(--green-light);
+      animation: arrowPulse 2s ease-in-out infinite;
+    }
+    @keyframes arrowPulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+    .comp-result {
+      margin-top: 28px;
+      padding: 16px 24px;
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.3);
+      border-radius: 12px;
+      display: inline-block;
+    }
+    .comp-result-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--green-light);
+    }
+
+    /* ===== CURRENCY SECTION ===== */
+    .currency-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+    .currency-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .currency-bar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .currency-bar-label {
+      width: 50px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .currency-bar-track {
+      flex: 1;
+      height: 32px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+    .currency-bar-fill {
+      height: 100%;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding-left: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .currency-bar-amount {
+      font-size: 13px;
+      color: var(--text2);
+      width: 120px;
+      text-align: right;
+    }
+
+    /* ===== MONTHLY HIGHLIGHTS ===== */
+    .month-highlights {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 48px;
+    }
+    .month-highlight-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .month-highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+    }
+    .mh-emoji { font-size: 32px; margin-bottom: 12px; }
+    .mh-title {
+      font-size: 13px;
+      color: var(--text2);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .mh-value {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+    .mh-detail {
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 6px;
+    }
+
+    /* ===== DAILY CHART FULL WIDTH ===== */
+    .daily-section {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 60px 24px;
+    }
+    .daily-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .daily-chart-wrap {
+      position: relative;
+      height: 240px;
+      margin-top: 32px;
+    }
+
+    /* ===== CTA / FOOTER ===== */
+    .cta-section {
+      text-align: center;
+      padding: 100px 24px;
+    }
+    .cta-heading {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .cta-heading .glow {
+      background: linear-gradient(135deg, var(--green-light), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cta-sub {
+      font-size: 18px;
+      color: var(--text2);
+      margin-bottom: 40px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text2);
+    }
+
+    /* ===== COUNTER ANIMATION ===== */
+    .count-up { display: inline-block; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+      .chart-row { grid-template-columns: 1fr; }
+      .comparison-grid { grid-template-columns: 1fr; gap: 16px; }
+      .comp-arrow { transform: rotate(90deg); }
+      .currency-visual { grid-template-columns: 1fr; }
+      .month-highlights { grid-template-columns: 1fr; }
+      .story-stats { flex-direction: column; }
+    }
+    @media (max-width: 600px) {
+      .kpi-strip { grid-template-columns: 1fr; }
+      .hero-number { letter-spacing: -3px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      2025年4月 〜 2026年3月 全期間確定
+    </div>
+    <div class="hero-logo">E</div>
+    <h1>EAGLE<br><span class="highlight">eBay海外販売</span></h1>
+    <p class="hero-sub">2025年度 年間実績レポート</p>
+    <div class="hero-number" id="heroNumber">¥21.29億</div>
+    <div class="hero-number-label">年間売上達成</div>
+    <div class="hero-growth">
+      <span>+372.7%</span>
+      <span style="font-size:14px;font-weight:400;">前期比成長</span>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    実績を見る
+    <span class="arrow">↓</span>
+  </div>
+</div>
+
+<!-- ==================== KPI ==================== -->
+<section>
+  <div class="section-label">Performance</div>
+  <h2 class="section-heading">主要KPI</h2>
+
+  <div class="kpi-strip">
+    <div class="kpi-card c-blue">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-label">年度累計売上</div>
+      <div class="kpi-value">¥21.29億</div>
+      <div class="kpi-sub">2025年4月〜2026年3月</div>
+      <div class="kpi-badge">▲ +372.7% 前期比</div>
+    </div>
+    <div class="kpi-card c-green">
+      <div class="kpi-icon">📦</div>
+      <div class="kpi-label">累計販売個数</div>
+      <div class="kpi-value">98,291個</div>
+      <div class="kpi-sub">年間販売数量</div>
+      <div class="kpi-badge">▲ +238.5% 前期比</div>
+    </div>
+    <div class="kpi-card c-purple">
+      <div class="kpi-icon">📈</div>
+      <div class="kpi-label">月平均売上</div>
+      <div class="kpi-value">¥1.77億</div>
+      <div class="kpi-sub">12ヶ月平均</div>
+      <div class="kpi-badge">最高月 ¥2.57億</div>
+    </div>
+    <div class="kpi-card c-orange">
+      <div class="kpi-icon">⚡</div>
+      <div class="kpi-label">日平均売上</div>
+      <div class="kpi-value">¥583万</div>
+      <div class="kpi-sub">365日平均</div>
+      <div class="kpi-badge">▲ 上昇トレンド継続</div>
+    </div>
+  </div>
+
+  <!-- ハイライト3枚 -->
+  <div class="month-highlights">
+    <div class="month-highlight-card">
+      <div class="mh-emoji">🏆</div>
+      <div class="mh-title">過去最高月商</div>
+      <div class="mh-value" style="color:var(--gold);">¥2.57億</div>
+      <div class="mh-detail">2026年3月に達成</div>
+    </div>
+    <div class="month-highlight-card">
+      <div class="mh-emoji">🌍</div>
+      <div class="mh-title">主要マーケット</div>
+      <div class="mh-value" style="color:var(--accent-light);">USD 91.8%</div>
+      <div class="mh-detail">米国市場が圧倒的シェア</div>
+    </div>
+    <div class="month-highlight-card">
+      <div class="mh-emoji">🔥</div>
+      <div class="mh-title">最高日商</div>
+      <div class="mh-value" style="color:var(--orange);">¥1,197万</div>
+      <div class="mh-detail">2025年8月10日</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CHART: 月別トレンド ==================== -->
+<section>
+  <div class="section-label">Trend</div>
+  <h2 class="section-heading">売上推移</h2>
+
+  <div class="chart-row">
+    <div class="chart-panel">
+      <h3>月別売上高の推移</h3>
+      <p class="chart-desc">2024年12月〜2026年3月 ｜ 棒グラフ: 売上高 / 折れ線: 販売個数</p>
+      <div class="chart-wrap" style="height:320px;">
+        <canvas id="mainChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-panel">
+      <h3>通貨別売上シェア</h3>
+      <p class="chart-desc">年度全期間 ｜ 合計 ¥21.29億</p>
+      <div class="chart-wrap" style="height:320px;">
+        <canvas id="currencyChart"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== DAILY ==================== -->
+<div class="daily-section">
+  <div class="daily-inner">
+    <div class="section-label">Daily Revenue</div>
+    <h2 class="section-heading" style="margin-bottom:0;">日別売上推移</h2>
+    <p style="color:var(--text2);font-size:14px;margin-bottom:0;">365日間の毎日の売上をリアルタイムで記録</p>
+    <div class="daily-chart-wrap">
+      <canvas id="dailyChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== GROWTH STORY ==================== -->
+<section class="story-section">
+  <div class="section-label">Growth Story</div>
+  <h2 class="section-heading">成長のストーリー</h2>
+
+  <div class="story-timeline">
+    <div class="story-item phase1">
+      <div class="story-dot"></div>
+      <div class="story-period">Phase 1: 2025年4月〜8月</div>
+      <div class="story-title">急速拡大期 ── 薄利多売で売上を最大化</div>
+      <div class="story-desc">eBay海外販売のスケールを一気に拡大。数量を最大限に増やし、月平均1万個以上を販売。8月には単月最多の11,932個を達成。</div>
+      <div class="story-stats">
+        <div class="story-stat">
+          <div class="story-stat-value" style="color:var(--accent-light);">¥1.62億</div>
+          <div class="story-stat-label">月平均売上</div>
+        </div>
+        <div class="story-stat">
+          <div class="story-stat-value" style="color:var(--accent-light);">10,538個</div>
+          <div class="story-stat-label">月平均販売数</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-item phase2">
+      <div class="story-dot"></div>
+      <div class="story-period">Turning Point: 2025年8月</div>
+      <div class="story-title">トランプ関税発動 ── 事業環境の大転換</div>
+      <div class="story-desc">関税発動に伴い日本郵便のアメリカ向け発送が停止。FedEx・DHLへ完全移行し、送料コストが大幅上昇。薄利多売モデルの見直しが急務に。</div>
+    </div>
+
+    <div class="story-item phase3">
+      <div class="story-dot"></div>
+      <div class="story-period">Phase 2: 2025年9月〜2026年3月</div>
+      <div class="story-title">戦略転換 ── 「一撃利益」モデルへ</div>
+      <div class="story-desc">「薄利多売」から「一撃利益重視」へ大胆にシフト。販売個数は約4割減少するも、売上高はむしろ16%増加。2026年3月には過去最高月商¥2.57億を記録。</div>
+      <div class="story-stats">
+        <div class="story-stat">
+          <div class="story-stat-value" style="color:var(--green-light);">¥1.88億</div>
+          <div class="story-stat-label">月平均売上</div>
+        </div>
+        <div class="story-stat">
+          <div class="story-stat-value" style="color:var(--gold);">6,514個</div>
+          <div class="story-stat-label">月平均販売数</div>
+        </div>
+        <div class="story-stat">
+          <div class="story-stat-value" style="color:var(--green-light);">¥2.57億</div>
+          <div class="story-stat-label">最高月商（3月）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 戦略転換の効果 -->
+  <div class="comparison-banner">
+    <h3>戦略転換 Before → After</h3>
+    <div class="comparison-grid">
+      <div class="comp-block">
+        <div class="comp-block-label">転換前（4〜8月）</div>
+        <div class="comp-block-value" style="color:var(--text2);">10,538<span style="font-size:16px;">個/月</span></div>
+        <div class="comp-block-sub">月平均売上 ¥1.62億</div>
+      </div>
+      <div class="comp-arrow">→</div>
+      <div class="comp-block">
+        <div class="comp-block-label">転換後（9月〜3月）</div>
+        <div class="comp-block-value" style="color:var(--green-light);">6,514<span style="font-size:16px;">個/月</span></div>
+        <div class="comp-block-sub">月平均売上 ¥1.88億</div>
+      </div>
+    </div>
+    <div class="comp-result">
+      <div class="comp-result-text">個数 ▼38.2%減 → 売上 ▲16.0%増 ── 高単価戦略が成功</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CURRENCY ==================== -->
+<section>
+  <div class="section-label">Markets</div>
+  <h2 class="section-heading">通貨別マーケット</h2>
+
+  <div class="currency-visual">
+    <div class="currency-bars" id="currencyBars"></div>
+    <div class="chart-panel" style="border:none;">
+      <div class="chart-wrap" style="height:280px;">
+        <canvas id="currencyDonut2"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CTA ==================== -->
+<section class="cta-section">
+  <div class="cta-heading">
+    EAGLEで、<br><span class="glow">世界に売ろう。</span>
+  </div>
+  <p class="cta-sub">年間21億円超の実績が証明する、eBay海外販売の可能性。</p>
+</section>
+
+<footer>
+  EAGLE 在庫管理システム &nbsp;|&nbsp; 更新日: 2026年4月4日 &nbsp;|&nbsp; 対象期間: 2025年4月1日〜2026年3月31日（全期間確定）
+</footer>
+
+<script>
+// ===== DATA =====
+const allMonthly = [
+  {month:'2024-12', jpy:114458137, qty:6761, label:'24年12月'},
+  {month:'2025-01', jpy:117342923, qty:7252, label:'25年1月'},
+  {month:'2025-02', jpy:98925472,  qty:6788, label:'25年2月'},
+  {month:'2025-03', jpy:119540172, qty:8235, label:'25年3月'},
+  {month:'2025-04', jpy:132339713, qty:8727, label:'25年4月'},
+  {month:'2025-05', jpy:143921256, qty:9726, label:'25年5月'},
+  {month:'2025-06', jpy:167826922, qty:11196,label:'25年6月'},
+  {month:'2025-07', jpy:174853172, qty:11111,label:'25年7月'},
+  {month:'2025-08', jpy:192373684, qty:11932,label:'25年8月'},
+  {month:'2025-09', jpy:140687190, qty:5551, label:'25年9月'},
+  {month:'2025-10', jpy:141260652, qty:4827, label:'25年10月'},
+  {month:'2025-11', jpy:158049885, qty:5222, label:'25年11月'},
+  {month:'2025-12', jpy:210858619, qty:7292, label:'25年12月'},
+  {month:'2026-01', jpy:213997371, qty:7404, label:'26年1月'},
+  {month:'2026-02', jpy:195822154, qty:7059, label:'26年2月'},
+  {month:'2026-03', jpy:256640394, qty:8244, label:'26年3月'},
+];
+
+const currencyData = [
+  {currency:'USD', jpy:1954191164, qty:90990, pct:91.8, color:'#3b82f6'},
+  {currency:'EUR', jpy:65634090,   qty:2572,  pct:3.1,  color:'#a855f7'},
+  {currency:'GBP', jpy:61911801,   qty:2834,  pct:2.9,  color:'#22c55e'},
+  {currency:'AUD', jpy:40314600,   qty:1533,  pct:1.9,  color:'#f97316'},
+  {currency:'CAD', jpy:6579359,    qty:362,   pct:0.3,  color:'#eab308'},
+];
+
+const dailyData = [
+  {date:'2025-04-01',jpy:3807645,qty:250},{date:'2025-04-02',jpy:4086581,qty:264},{date:'2025-04-03',jpy:3460255,qty:293},{date:'2025-04-04',jpy:4643716,qty:311},{date:'2025-04-05',jpy:4319098,qty:326},{date:'2025-04-06',jpy:4100076,qty:319},{date:'2025-04-07',jpy:4211165,qty:274},{date:'2025-04-08',jpy:3613470,qty:261},{date:'2025-04-09',jpy:3810885,qty:275},{date:'2025-04-10',jpy:4174753,qty:291},{date:'2025-04-11',jpy:4327502,qty:305},{date:'2025-04-12',jpy:3747462,qty:258},{date:'2025-04-13',jpy:3392588,qty:267},{date:'2025-04-14',jpy:4286272,qty:398},{date:'2025-04-15',jpy:3815449,qty:261},{date:'2025-04-16',jpy:3331535,qty:260},{date:'2025-04-17',jpy:4610218,qty:306},{date:'2025-04-18',jpy:5339131,qty:299},{date:'2025-04-19',jpy:6552205,qty:317},{date:'2025-04-20',jpy:4907308,qty:286},{date:'2025-04-21',jpy:4993262,qty:317},{date:'2025-04-22',jpy:4727873,qty:292},{date:'2025-04-23',jpy:4176878,qty:287},{date:'2025-04-24',jpy:4566591,qty:277},{date:'2025-04-25',jpy:4792452,qty:308},{date:'2025-04-26',jpy:5158623,qty:306},{date:'2025-04-27',jpy:4882220,qty:283},{date:'2025-04-28',jpy:4895098,qty:298},{date:'2025-04-29',jpy:4200931,qty:269},{date:'2025-04-30',jpy:5408472,qty:269},
+  {date:'2025-05-01',jpy:4296607,qty:291},{date:'2025-05-02',jpy:4824060,qty:312},{date:'2025-05-03',jpy:4943836,qty:300},{date:'2025-05-04',jpy:4902880,qty:302},{date:'2025-05-05',jpy:3768349,qty:398},{date:'2025-05-06',jpy:3970635,qty:288},{date:'2025-05-07',jpy:5021800,qty:324},{date:'2025-05-08',jpy:5141889,qty:314},{date:'2025-05-09',jpy:4390192,qty:296},{date:'2025-05-10',jpy:4514550,qty:319},{date:'2025-05-11',jpy:4945459,qty:339},{date:'2025-05-12',jpy:5058195,qty:352},{date:'2025-05-13',jpy:4051815,qty:312},{date:'2025-05-14',jpy:4052548,qty:269},{date:'2025-05-15',jpy:4303925,qty:301},{date:'2025-05-16',jpy:3920218,qty:261},{date:'2025-05-17',jpy:3755999,qty:301},{date:'2025-05-18',jpy:3546788,qty:258},{date:'2025-05-19',jpy:4073934,qty:309},{date:'2025-05-20',jpy:4433229,qty:286},{date:'2025-05-21',jpy:4023403,qty:272},{date:'2025-05-22',jpy:5510804,qty:328},{date:'2025-05-23',jpy:4382663,qty:326},{date:'2025-05-24',jpy:5011090,qty:380},{date:'2025-05-25',jpy:5043181,qty:357},{date:'2025-05-26',jpy:5649583,qty:324},{date:'2025-05-27',jpy:6062238,qty:289},{date:'2025-05-28',jpy:5456821,qty:311},{date:'2025-05-29',jpy:4658381,qty:306},{date:'2025-05-30',jpy:5417265,qty:364},{date:'2025-05-31',jpy:4788921,qty:337},
+  {date:'2025-06-01',jpy:4574769,qty:352},{date:'2025-06-02',jpy:4844068,qty:334},{date:'2025-06-03',jpy:5209350,qty:349},{date:'2025-06-04',jpy:3776365,qty:304},{date:'2025-06-05',jpy:4940274,qty:326},{date:'2025-06-06',jpy:6213309,qty:393},{date:'2025-06-07',jpy:4890819,qty:364},{date:'2025-06-08',jpy:4795491,qty:359},{date:'2025-06-09',jpy:5485147,qty:415},{date:'2025-06-10',jpy:5478854,qty:372},{date:'2025-06-11',jpy:4828123,qty:367},{date:'2025-06-12',jpy:7031035,qty:395},{date:'2025-06-13',jpy:4758420,qty:352},{date:'2025-06-14',jpy:5826321,qty:411},{date:'2025-06-15',jpy:5563927,qty:404},{date:'2025-06-16',jpy:7810308,qty:459},{date:'2025-06-17',jpy:5527311,qty:420},{date:'2025-06-18',jpy:4530553,qty:348},{date:'2025-06-19',jpy:5942235,qty:412},{date:'2025-06-20',jpy:7896259,qty:377},{date:'2025-06-21',jpy:7818809,qty:423},{date:'2025-06-22',jpy:5326107,qty:371},{date:'2025-06-23',jpy:5833975,qty:367},{date:'2025-06-24',jpy:6924401,qty:332},{date:'2025-06-25',jpy:5207288,qty:402},{date:'2025-06-26',jpy:5744741,qty:334},{date:'2025-06-27',jpy:4287883,qty:385},{date:'2025-06-28',jpy:5211132,qty:341},{date:'2025-06-29',jpy:6282963,qty:372},{date:'2025-06-30',jpy:5266686,qty:356},
+  {date:'2025-07-01',jpy:4974025,qty:374},{date:'2025-07-02',jpy:6188731,qty:368},{date:'2025-07-03',jpy:5495333,qty:410},{date:'2025-07-04',jpy:7558352,qty:436},{date:'2025-07-05',jpy:5193615,qty:370},{date:'2025-07-06',jpy:5341479,qty:396},{date:'2025-07-07',jpy:5055545,qty:361},{date:'2025-07-08',jpy:5525811,qty:368},{date:'2025-07-09',jpy:5106456,qty:320},{date:'2025-07-10',jpy:5772565,qty:363},{date:'2025-07-11',jpy:6163165,qty:368},{date:'2025-07-12',jpy:4902157,qty:375},{date:'2025-07-13',jpy:4024916,qty:327},{date:'2025-07-14',jpy:6267503,qty:322},{date:'2025-07-15',jpy:5772878,qty:329},{date:'2025-07-16',jpy:6348405,qty:399},{date:'2025-07-17',jpy:5337864,qty:323},{date:'2025-07-18',jpy:5812221,qty:369},{date:'2025-07-19',jpy:4820375,qty:377},{date:'2025-07-20',jpy:5217776,qty:356},{date:'2025-07-21',jpy:8463668,qty:404},{date:'2025-07-22',jpy:4391701,qty:316},{date:'2025-07-23',jpy:4833195,qty:313},{date:'2025-07-24',jpy:6104654,qty:330},{date:'2025-07-25',jpy:5684790,qty:376},{date:'2025-07-26',jpy:6424751,qty:351},{date:'2025-07-27',jpy:5632762,qty:336},{date:'2025-07-28',jpy:6033522,qty:349},{date:'2025-07-29',jpy:4934892,qty:330},{date:'2025-07-30',jpy:6523646,qty:333},{date:'2025-07-31',jpy:4946418,qty:362},
+  {date:'2025-08-01',jpy:4947144,qty:366},{date:'2025-08-02',jpy:8341561,qty:409},{date:'2025-08-03',jpy:6932208,qty:395},{date:'2025-08-04',jpy:7443731,qty:390},{date:'2025-08-05',jpy:6968552,qty:396},{date:'2025-08-06',jpy:5927829,qty:378},{date:'2025-08-07',jpy:8133258,qty:409},{date:'2025-08-08',jpy:5437699,qty:393},{date:'2025-08-09',jpy:9940771,qty:754},{date:'2025-08-10',jpy:11970414,qty:966},{date:'2025-08-11',jpy:8278723,qty:558},{date:'2025-08-12',jpy:7212082,qty:572},{date:'2025-08-13',jpy:6785108,qty:488},{date:'2025-08-14',jpy:6500407,qty:432},{date:'2025-08-15',jpy:6807884,qty:485},{date:'2025-08-16',jpy:5887004,qty:398},{date:'2025-08-17',jpy:5074911,qty:399},{date:'2025-08-18',jpy:6053495,qty:327},{date:'2025-08-19',jpy:5813187,qty:393},{date:'2025-08-20',jpy:5173042,qty:283},{date:'2025-08-21',jpy:5613765,qty:305},{date:'2025-08-22',jpy:4501219,qty:282},{date:'2025-08-23',jpy:5388109,qty:379},{date:'2025-08-24',jpy:5322444,qty:253},{date:'2025-08-25',jpy:5835014,qty:251},{date:'2025-08-26',jpy:3974360,qty:226},{date:'2025-08-27',jpy:4393150,qty:218},{date:'2025-08-28',jpy:4452235,qty:231},{date:'2025-08-29',jpy:4623289,qty:206},{date:'2025-08-30',jpy:3474150,qty:199},{date:'2025-08-31',jpy:5166939,qty:191},
+  {date:'2025-09-01',jpy:3354681,qty:176},{date:'2025-09-02',jpy:5909181,qty:217},{date:'2025-09-03',jpy:4651125,qty:194},{date:'2025-09-04',jpy:4591456,qty:184},{date:'2025-09-05',jpy:5893489,qty:200},{date:'2025-09-06',jpy:3941708,qty:176},{date:'2025-09-07',jpy:4478727,qty:181},{date:'2025-09-08',jpy:4262669,qty:185},{date:'2025-09-09',jpy:5090199,qty:179},{date:'2025-09-10',jpy:3394150,qty:154},{date:'2025-09-11',jpy:4739973,qty:205},{date:'2025-09-12',jpy:4484321,qty:254},{date:'2025-09-13',jpy:4239261,qty:169},{date:'2025-09-14',jpy:3484724,qty:142},{date:'2025-09-15',jpy:3307595,qty:155},{date:'2025-09-16',jpy:6753114,qty:166},{date:'2025-09-17',jpy:4363064,qty:165},{date:'2025-09-18',jpy:3746416,qty:186},{date:'2025-09-19',jpy:4884335,qty:207},{date:'2025-09-20',jpy:4191790,qty:156},{date:'2025-09-21',jpy:3068061,qty:132},{date:'2025-09-22',jpy:4771454,qty:197},{date:'2025-09-23',jpy:4410183,qty:195},{date:'2025-09-24',jpy:3909997,qty:166},{date:'2025-09-25',jpy:5263819,qty:183},{date:'2025-09-26',jpy:5021120,qty:201},{date:'2025-09-27',jpy:5385010,qty:177},{date:'2025-09-28',jpy:6864966,qty:233},{date:'2025-09-29',jpy:6868840,qty:232},{date:'2025-09-30',jpy:5361761,qty:184},
+  {date:'2025-10-01',jpy:4819138,qty:186},{date:'2025-10-02',jpy:4714111,qty:188},{date:'2025-10-03',jpy:5277501,qty:203},{date:'2025-10-04',jpy:4554835,qty:199},{date:'2025-10-05',jpy:4919955,qty:193},{date:'2025-10-06',jpy:6661741,qty:182},{date:'2025-10-07',jpy:4110541,qty:165},{date:'2025-10-08',jpy:5173150,qty:182},{date:'2025-10-09',jpy:5296169,qty:181},{date:'2025-10-10',jpy:5242501,qty:190},{date:'2025-10-11',jpy:4550174,qty:162},{date:'2025-10-12',jpy:3724113,qty:158},{date:'2025-10-13',jpy:5719673,qty:185},{date:'2025-10-14',jpy:3306709,qty:130},{date:'2025-10-15',jpy:6121708,qty:206},{date:'2025-10-16',jpy:3570817,qty:133},{date:'2025-10-17',jpy:4464259,qty:151},{date:'2025-10-18',jpy:3523416,qty:148},{date:'2025-10-19',jpy:4434279,qty:116},{date:'2025-10-20',jpy:6150698,qty:150},{date:'2025-10-21',jpy:3872651,qty:146},{date:'2025-10-22',jpy:5016206,qty:134},{date:'2025-10-23',jpy:2846032,qty:94},{date:'2025-10-24',jpy:4649318,qty:138},{date:'2025-10-25',jpy:2853061,qty:102},{date:'2025-10-26',jpy:3748008,qty:128},{date:'2025-10-27',jpy:3542530,qty:127},{date:'2025-10-28',jpy:4259021,qty:129},{date:'2025-10-29',jpy:5557598,qty:136},{date:'2025-10-30',jpy:3449974,qty:131},{date:'2025-10-31',jpy:5130765,qty:154},
+  {date:'2025-11-01',jpy:2346577,qty:115},{date:'2025-11-02',jpy:3435761,qty:124},{date:'2025-11-03',jpy:5897015,qty:173},{date:'2025-11-04',jpy:6110974,qty:177},{date:'2025-11-05',jpy:6725266,qty:163},{date:'2025-11-06',jpy:6867574,qty:243},{date:'2025-11-07',jpy:3648482,qty:144},{date:'2025-11-08',jpy:4745757,qty:170},{date:'2025-11-09',jpy:4602566,qty:160},{date:'2025-11-10',jpy:4088237,qty:172},{date:'2025-11-11',jpy:3902100,qty:179},{date:'2025-11-12',jpy:3685857,qty:124},{date:'2025-11-13',jpy:4942083,qty:148},{date:'2025-11-14',jpy:4728582,qty:156},{date:'2025-11-15',jpy:4204925,qty:156},{date:'2025-11-16',jpy:4886598,qty:162},{date:'2025-11-17',jpy:4957262,qty:167},{date:'2025-11-18',jpy:6244822,qty:154},{date:'2025-11-19',jpy:4514816,qty:160},{date:'2025-11-20',jpy:5757431,qty:177},{date:'2025-11-21',jpy:5948242,qty:166},{date:'2025-11-22',jpy:4955119,qty:161},{date:'2025-11-23',jpy:6291251,qty:192},{date:'2025-11-24',jpy:5244293,qty:189},{date:'2025-11-25',jpy:5964659,qty:195},{date:'2025-11-26',jpy:6666200,qty:212},{date:'2025-11-27',jpy:5453624,qty:195},{date:'2025-11-28',jpy:7764065,qty:232},{date:'2025-11-29',jpy:8887682,qty:244},{date:'2025-11-30',jpy:4582065,qty:212},
+  {date:'2025-12-01',jpy:4198830,qty:178},{date:'2025-12-02',jpy:6906972,qty:232},{date:'2025-12-03',jpy:4992363,qty:194},{date:'2025-12-04',jpy:5914268,qty:208},{date:'2025-12-05',jpy:6996977,qty:215},{date:'2025-12-06',jpy:6004667,qty:226},{date:'2025-12-07',jpy:5996300,qty:226},{date:'2025-12-08',jpy:6633410,qty:226},{date:'2025-12-09',jpy:6870481,qty:227},{date:'2025-12-10',jpy:7345799,qty:223},{date:'2025-12-11',jpy:8869102,qty:237},{date:'2025-12-12',jpy:6909980,qty:245},{date:'2025-12-13',jpy:6456452,qty:233},{date:'2025-12-14',jpy:6348803,qty:225},{date:'2025-12-15',jpy:7081212,qty:228},{date:'2025-12-16',jpy:6950522,qty:255},{date:'2025-12-17',jpy:5616083,qty:227},{date:'2025-12-18',jpy:5862990,qty:218},{date:'2025-12-19',jpy:7311535,qty:228},{date:'2025-12-20',jpy:9817718,qty:414},{date:'2025-12-21',jpy:7480076,qty:216},{date:'2025-12-22',jpy:6020444,qty:208},{date:'2025-12-23',jpy:5652066,qty:211},{date:'2025-12-24',jpy:6549949,qty:200},{date:'2025-12-25',jpy:6428796,qty:208},{date:'2025-12-26',jpy:9083087,qty:326},{date:'2025-12-27',jpy:9858444,qty:302},{date:'2025-12-28',jpy:8046584,qty:255},{date:'2025-12-29',jpy:6320743,qty:228},{date:'2025-12-30',jpy:5663632,qty:218},{date:'2025-12-31',jpy:6670334,qty:255},
+  {date:'2026-01-01',jpy:6236514,qty:219},{date:'2026-01-02',jpy:7592436,qty:264},{date:'2026-01-03',jpy:6826185,qty:244},{date:'2026-01-04',jpy:7732859,qty:267},{date:'2026-01-05',jpy:7165126,qty:234},{date:'2026-01-06',jpy:7247470,qty:255},{date:'2026-01-07',jpy:6888001,qty:238},{date:'2026-01-08',jpy:7121197,qty:225},{date:'2026-01-09',jpy:6414418,qty:229},{date:'2026-01-10',jpy:6674897,qty:230},{date:'2026-01-11',jpy:7232498,qty:251},{date:'2026-01-12',jpy:7161683,qty:247},{date:'2026-01-13',jpy:7398120,qty:229},{date:'2026-01-14',jpy:7906862,qty:238},{date:'2026-01-15',jpy:6052044,qty:214},{date:'2026-01-16',jpy:6736727,qty:235},{date:'2026-01-17',jpy:6618096,qty:221},{date:'2026-01-18',jpy:6142978,qty:218},{date:'2026-01-19',jpy:6882916,qty:241},{date:'2026-01-20',jpy:5902467,qty:241},{date:'2026-01-21',jpy:6150239,qty:220},{date:'2026-01-22',jpy:8734108,qty:250},{date:'2026-01-23',jpy:7519541,qty:245},{date:'2026-01-24',jpy:6709777,qty:282},{date:'2026-01-25',jpy:6259297,qty:230},{date:'2026-01-26',jpy:7622916,qty:257},{date:'2026-01-27',jpy:5646161,qty:227},{date:'2026-01-28',jpy:6469069,qty:240},{date:'2026-01-29',jpy:6171960,qty:217},{date:'2026-01-30',jpy:7696979,qty:255},{date:'2026-01-31',jpy:7083830,qty:241},
+  {date:'2026-02-01',jpy:6116981,qty:234},{date:'2026-02-02',jpy:8021987,qty:267},{date:'2026-02-03',jpy:6831645,qty:233},{date:'2026-02-04',jpy:7859135,qty:240},{date:'2026-02-05',jpy:6080209,qty:227},{date:'2026-02-06',jpy:8092959,qty:254},{date:'2026-02-07',jpy:6890812,qty:252},{date:'2026-02-08',jpy:6717067,qty:237},{date:'2026-02-09',jpy:7399711,qty:270},{date:'2026-02-10',jpy:6612466,qty:236},{date:'2026-02-11',jpy:6436727,qty:243},{date:'2026-02-12',jpy:6041577,qty:235},{date:'2026-02-13',jpy:8425522,qty:299},{date:'2026-02-14',jpy:5765058,qty:242},{date:'2026-02-15',jpy:6622507,qty:231},{date:'2026-02-16',jpy:7456659,qty:273},{date:'2026-02-17',jpy:5504182,qty:251},{date:'2026-02-18',jpy:6188816,qty:259},{date:'2026-02-19',jpy:5758487,qty:203},{date:'2026-02-20',jpy:6238346,qty:231},{date:'2026-02-21',jpy:7756298,qty:244},{date:'2026-02-22',jpy:6792940,qty:242},{date:'2026-02-23',jpy:7881905,qty:278},{date:'2026-02-24',jpy:5961167,qty:245},{date:'2026-02-25',jpy:7465072,qty:227},{date:'2026-02-26',jpy:6739747,qty:267},{date:'2026-02-27',jpy:8848868,qty:303},{date:'2026-02-28',jpy:9315304,qty:336},
+  {date:'2026-03-01',jpy:10334645,qty:304},{date:'2026-03-02',jpy:10419125,qty:311},{date:'2026-03-03',jpy:7698348,qty:254},{date:'2026-03-04',jpy:8414191,qty:264},{date:'2026-03-05',jpy:7615080,qty:262},{date:'2026-03-06',jpy:7792696,qty:256},{date:'2026-03-07',jpy:10629407,qty:267},{date:'2026-03-08',jpy:9935113,qty:275},{date:'2026-03-09',jpy:8467737,qty:258},{date:'2026-03-10',jpy:8534781,qty:270},{date:'2026-03-11',jpy:7139648,qty:283},{date:'2026-03-12',jpy:8566029,qty:281},{date:'2026-03-13',jpy:7844453,qty:257},{date:'2026-03-14',jpy:8155274,qty:257},{date:'2026-03-15',jpy:6835765,qty:242},{date:'2026-03-16',jpy:9355306,qty:278},{date:'2026-03-17',jpy:9369908,qty:261},{date:'2026-03-18',jpy:7791135,qty:235},{date:'2026-03-19',jpy:7579067,qty:277},{date:'2026-03-20',jpy:7984394,qty:254},{date:'2026-03-21',jpy:7143471,qty:248},{date:'2026-03-22',jpy:8129824,qty:270},{date:'2026-03-23',jpy:8498276,qty:263},{date:'2026-03-24',jpy:7121634,qty:250},{date:'2026-03-25',jpy:7487045,qty:250},{date:'2026-03-26',jpy:6353281,qty:262},{date:'2026-03-27',jpy:7611175,qty:260},{date:'2026-03-28',jpy:8393428,qty:271},{date:'2026-03-29',jpy:6675094,qty:238},{date:'2026-03-30',jpy:10558752,qty:292},{date:'2026-03-31',jpy:8206312,qty:294},
+];
+
+const fyMonths = ['2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03'];
+
+// ===== CHARTS =====
+const chartFont = { family: "'Noto Sans JP', sans-serif" };
+const gridColor = '#1e293b';
+const tickColor = '#64748b';
+
+// Main Chart
+new Chart(document.getElementById('mainChart').getContext('2d'), {
+  data: {
+    labels: allMonthly.map(m => m.label),
+    datasets: [
+      {
+        type: 'bar',
+        label: '売上高（円）',
+        data: allMonthly.map(m => m.jpy),
+        backgroundColor: allMonthly.map(m =>
+          fyMonths.includes(m.month)
+            ? 'rgba(59,130,246,0.85)'
+            : 'rgba(59,130,246,0.25)'
+        ),
+        borderRadius: 6,
+        yAxisID: 'y',
+      },
+      {
+        type: 'line',
+        label: '販売個数',
+        data: allMonthly.map(m => m.qty),
+        borderColor: '#f97316',
+        backgroundColor: 'rgba(249,115,22,0.1)',
+        pointBackgroundColor: '#f97316',
+        tension: 0.4,
+        yAxisID: 'y2',
+        pointRadius: 5,
+        pointHoverRadius: 7,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { labels: { color: tickColor, font: { ...chartFont, size: 12 } } },
+      tooltip: {
+        backgroundColor: '#1e293b',
+        borderColor: '#334155',
+        borderWidth: 1,
+        titleColor: '#f1f5f9',
+        bodyColor: '#94a3b8',
+        titleFont: { ...chartFont, size: 13, weight: '700' },
+        bodyFont: { ...chartFont, size: 12 },
+        padding: 12,
+        cornerRadius: 8,
+        callbacks: {
+          label: ctx => ctx.dataset.label === '売上高（円）'
+            ? `売上: ¥${ctx.raw.toLocaleString()}`
+            : `個数: ${ctx.raw.toLocaleString()}個`
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { color: tickColor, font: { ...chartFont, size: 11 } }, grid: { color: gridColor } },
+      y: {
+        ticks: { color: tickColor, font: { ...chartFont, size: 11 }, callback: v => '¥'+Math.round(v/1e6)+'M' },
+        grid: { color: gridColor }
+      },
+      y2: {
+        position: 'right',
+        ticks: { color: '#f97316', font: { ...chartFont, size: 11 }, callback: v => v.toLocaleString()+'個' },
+        grid: { drawOnChartArea: false }
+      }
+    }
+  }
+});
+
+// Currency Donut (main)
+new Chart(document.getElementById('currencyChart').getContext('2d'), {
+  type: 'doughnut',
+  data: {
+    labels: currencyData.map(c => c.currency),
+    datasets: [{
+      data: currencyData.map(c => c.jpy),
+      backgroundColor: currencyData.map(c => c.color),
+      borderWidth: 3,
+      borderColor: '#111827',
+      hoverOffset: 12,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '68%',
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { color: tickColor, font: { ...chartFont, size: 12 }, padding: 16, boxWidth: 14 }
+      },
+      tooltip: {
+        backgroundColor: '#1e293b',
+        borderColor: '#334155',
+        borderWidth: 1,
+        titleColor: '#f1f5f9',
+        bodyColor: '#94a3b8',
+        padding: 12,
+        cornerRadius: 8,
+        callbacks: {
+          label: ctx => ` ${ctx.label}: ¥${ctx.parsed.toLocaleString()} (${currencyData[ctx.dataIndex].pct}%)`
+        }
+      }
+    }
+  }
+});
+
+// Daily Chart
+const dailyLabels = dailyData.map(d => {
+  const dt = new Date(d.date);
+  return (dt.getMonth()+1) + '/' + dt.getDate();
+});
+new Chart(document.getElementById('dailyChart').getContext('2d'), {
+  type: 'line',
+  data: {
+    labels: dailyLabels,
+    datasets: [{
+      label: '日別売上（円）',
+      data: dailyData.map(d => d.jpy),
+      borderColor: '#3b82f6',
+      backgroundColor: (ctx) => {
+        const chart = ctx.chart;
+        const {ctx: c, chartArea} = chart;
+        if (!chartArea) return 'rgba(59,130,246,0.08)';
+        const gradient = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+        gradient.addColorStop(0, 'rgba(59,130,246,0.2)');
+        gradient.addColorStop(1, 'rgba(59,130,246,0.01)');
+        return gradient;
+      },
+      fill: true,
+      tension: 0.3,
+      pointRadius: 0,
+      pointHoverRadius: 6,
+      pointHoverBackgroundColor: '#3b82f6',
+      borderWidth: 1.5,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1e293b',
+        borderColor: '#334155',
+        borderWidth: 1,
+        titleColor: '#f1f5f9',
+        bodyColor: '#94a3b8',
+        padding: 12,
+        cornerRadius: 8,
+        callbacks: {
+          label: ctx => `売上: ¥${ctx.raw.toLocaleString()}`
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: tickColor,
+          font: { ...chartFont, size: 10 },
+          maxTicksLimit: 24,
+          maxRotation: 0,
+        },
+        grid: { color: gridColor }
+      },
+      y: {
+        ticks: {
+          color: tickColor,
+          font: { ...chartFont, size: 11 },
+          callback: v => '¥'+Math.round(v/1e6)+'M'
+        },
+        grid: { color: gridColor }
+      }
+    }
+  }
+});
+
+// Currency Bars
+const cBars = document.getElementById('currencyBars');
+const maxCJpy = Math.max(...currencyData.map(c => c.jpy));
+currencyData.forEach(c => {
+  const pct = (c.jpy / maxCJpy * 100).toFixed(1);
+  const div = document.createElement('div');
+  div.className = 'currency-bar-item';
+  div.innerHTML = `
+    <span class="currency-bar-label" style="color:${c.color}">${c.currency}</span>
+    <div class="currency-bar-track">
+      <div class="currency-bar-fill" style="width:${pct}%;background:${c.color};">${c.pct}%</div>
+    </div>
+    <span class="currency-bar-amount">¥${(c.jpy/1e8).toFixed(1)}億</span>
+  `;
+  cBars.appendChild(div);
+});
+
+// Currency Donut 2
+new Chart(document.getElementById('currencyDonut2').getContext('2d'), {
+  type: 'doughnut',
+  data: {
+    labels: currencyData.map(c => c.currency + ' ' + c.pct + '%'),
+    datasets: [{
+      data: currencyData.map(c => c.jpy),
+      backgroundColor: currencyData.map(c => c.color),
+      borderWidth: 3,
+      borderColor: '#111827',
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '72%',
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { color: tickColor, font: { ...chartFont, size: 11 }, padding: 12, boxWidth: 12 }
+      },
+      tooltip: { enabled: false }
+    }
+  }
+});
+
+// ===== Intersection Observer for animations =====
+const observerOptions = { threshold: 0.1 };
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.kpi-card, .chart-panel, .story-item, .month-highlight-card, .comparison-banner').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(30px)';
+  el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>
